@@ -5,10 +5,7 @@
 //  Created by Damian Modernell on 23/1/25.
 //
 
-import XCTest
 @testable import BTCLoader
+import XCTest
 
-final class BTCLoaderTests: XCTestCase {
-
-
-}
+final class BTCLoaderTests: XCTestCase {}
