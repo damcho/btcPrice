@@ -11,11 +11,16 @@ import XCTest
 struct BTCPrice: Equatable {}
 
 enum RemoteBTCPriceLoaderError: Error {
-    case decding
+    case decoding
+    case connectivity
+}
+
+enum HTTPClientError: Error {
+    case timeout
 }
 
 protocol HTTPClient {
-    func load(url: URL) async throws -> (HTTPURLResponse, Data)
+    func load(url: URL) async throws(HTTPClientError) -> (HTTPURLResponse, Data)
 }
 
 struct RemoteBTCPriceLoader {
@@ -26,21 +31,36 @@ struct RemoteBTCPriceLoader {
     func loadBTCPrice() async throws(RemoteBTCPriceLoaderError) -> BTCPrice {
         do {
             return try await map(httpClient.load(url: url))
+        } catch is HTTPClientError {
+            throw .connectivity
         } catch {
-            throw .decding
+            throw .decoding
         }
     }
 }
 
 final class BTCLoaderTests: XCTestCase {
-    func test_throws_error_on_mapping_failure() async {
-        let sut = makeSUT { _, _ in
-            throw anyError
-        }
+    func test_throws_decoding_error_on_mapping_failure() async {
+        let sut = makeSUT(
+            for: {_, _ in throw RemoteBTCPriceLoaderError.decoding }
+        )
 
         await XCTAssertThrowsError(
             try await sut.loadBTCPrice()
+        ){ error in
+            XCTAssertEqual(error as? RemoteBTCPriceLoaderError, RemoteBTCPriceLoaderError.decoding)
+        }
+    }
+    
+    func test_throws_connectivity_error_on_http_response_failure() async {
+        let sut = makeSUT(
+            httpResult: .failure(anyHTTPError)
         )
+        await XCTAssertThrowsError(
+            try await sut.loadBTCPrice()
+        ) { error in
+            XCTAssertEqual(error as? RemoteBTCPriceLoaderError, RemoteBTCPriceLoaderError.connectivity)
+        }
     }
     
     func test_btc_price_on_successful_mapping() async throws {
@@ -60,7 +80,7 @@ final class BTCLoaderTests: XCTestCase {
 extension BTCLoaderTests {
     func makeSUT(
         for mapper: @escaping (HTTPURLResponse, Data) throws -> BTCPrice = {_, _ in anyBTCPrice},
-        httpResult: Result<(HTTPURLResponse, Data), Error> = .success((anyHTTPResponse, anyData))
+        httpResult: Result<(HTTPURLResponse, Data), HTTPClientError> = .success((anyHTTPResponse, anyData))
     ) -> RemoteBTCPriceLoader {
         RemoteBTCPriceLoader(
             httpClient: HTTPClientStub(result: httpResult),
@@ -78,8 +98,8 @@ var anyData: Data {
     Data()
 }
 
-var anyError: Error {
-    NSError(domain: "any error", code: 1)
+var anyHTTPError: HTTPClientError {
+    .timeout
 }
 
 var anyURL: URL {
@@ -96,15 +116,15 @@ var anyHTTPResponse: HTTPURLResponse {
 }
 
 struct BTCMapperStub {
-    let result: Result<BTCPrice, Error>
-    func success(httpResponse: HTTPURLResponse, data: Data) throws -> BTCPrice {
+    let result: Result<BTCPrice, RemoteBTCPriceLoaderError>
+    func success(httpResponse: HTTPURLResponse, data: Data) throws(RemoteBTCPriceLoaderError) -> BTCPrice {
         try result.get()
     }
 }
 
 struct HTTPClientStub: HTTPClient {
-    let result: Result<(HTTPURLResponse, Data), Error>
-    func load(url: URL) async throws -> (HTTPURLResponse, Data) {
+    let result: Result<(HTTPURLResponse, Data), HTTPClientError>
+    func load(url: URL) async throws(HTTPClientError) -> (HTTPURLResponse, Data) {
         try result.get()
     }
 }
