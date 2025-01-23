@@ -26,3 +26,5 @@
   --disable redundantExtensionACL 
   --disable unusedArguments
   
+  # Excluded files
+  --exclude BTCLoader/BTCLoaderTests
