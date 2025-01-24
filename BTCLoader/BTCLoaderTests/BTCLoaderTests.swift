@@ -8,37 +8,6 @@
 @testable import BTCLoader
 import XCTest
 
-struct BTCPrice: Equatable {}
-
-enum RemoteBTCPriceLoaderError: Error {
-    case decoding
-    case connectivity
-}
-
-enum HTTPClientError: Error {
-    case timeout
-}
-
-protocol HTTPClient {
-    func load(url: URL) async throws(HTTPClientError) -> (HTTPURLResponse, Data)
-}
-
-struct RemoteBTCPriceLoader {
-    let httpClient: HTTPClient
-    let url: URL
-    let map: ((response: HTTPURLResponse, data: Data)) throws -> BTCPrice
-    
-    func loadBTCPrice() async throws(RemoteBTCPriceLoaderError) -> BTCPrice {
-        do {
-            return try await map(httpClient.load(url: url))
-        } catch is HTTPClientError {
-            throw .connectivity
-        } catch {
-            throw .decoding
-        }
-    }
-}
-
 final class BTCLoaderTests: XCTestCase {
     func test_throws_decoding_error_on_mapping_failure() async {
         let sut = makeSUT(
