@@ -21,12 +21,28 @@ final class BinanceBTCLoaderMapperTests: XCTestCase {
             try BinanceBTCLoaderMapper.map(non200HTTPResponse, anyData)
         )
     }
+    
+    func test_throws_on_200_response_and_empty_data() throws {
+        let emptyData = Data()
+        XCTAssertThrowsError(
+            try BinanceBTCLoaderMapper.map(validHTTPResponse, emptyData)
+        )
+    }
 }
 
 var non200HTTPResponse: HTTPURLResponse {
     HTTPURLResponse(
         url: anyURL,
         statusCode: 404,
+        httpVersion: nil,
+        headerFields: nil
+    )!
+}
+
+var validHTTPResponse: HTTPURLResponse {
+    HTTPURLResponse(
+        url: anyURL,
+        statusCode: 200,
         httpVersion: nil,
         headerFields: nil
     )!
