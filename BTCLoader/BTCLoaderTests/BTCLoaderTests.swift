@@ -60,7 +60,7 @@ extension BTCLoaderTests {
 }
 
 var anyBTCPrice: BTCPrice {
-    BTCPrice()
+    BTCPrice(amount: 10.0, currency: .USD)
 }
 
 var anyData: Data {
