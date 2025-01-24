@@ -12,14 +12,18 @@ final class BinanceBTCLoaderMapperTests: XCTestCase {
     
     func test_throws_on_non_200_http_response() throws {
         XCTAssertThrowsError(
-            try BinanceBTCLoaderMapper.map(non200HTTPResponse, anyData)
+            try BinanceBTCLoaderMapper.map(
+                http: (non200HTTPResponse, anyData)
+            )
         )
     }
     
     func test_throws_on_200_response_and_empty_data() throws {
         let emptyData = Data()
         XCTAssertThrowsError(
-            try BinanceBTCLoaderMapper.map(validHTTPResponse, emptyData)
+            try BinanceBTCLoaderMapper.map(
+                http: (validHTTPResponse, emptyData)
+            )
         )
     }
     
@@ -27,7 +31,7 @@ final class BinanceBTCLoaderMapperTests: XCTestCase {
         let expectedBTCPrice = anyBTCPrice
         
         let decodedBTCprice = try BinanceBTCLoaderMapper.map(
-            validHTTPResponse, expectedBTCPrice.encoded
+            http: (validHTTPResponse, expectedBTCPrice.encoded)
         )
         
         XCTAssertEqual(decodedBTCprice, expectedBTCPrice.decoded)

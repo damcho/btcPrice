@@ -17,13 +17,13 @@ enum BinanceBTCLoaderMapper {
         }
     }
 
-    static func map(_ response: HTTPURLResponse, _ data: Data) throws -> BTCPrice {
-        guard response.statusCode == 200 else {
+    static func map(http: (response: HTTPURLResponse, data: Data)) throws -> BTCPrice {
+        guard http.response.statusCode == 200 else {
             throw RemoteBTCPriceLoaderError.connectivity
         }
         let binanceBTCPrice = try JSONDecoder().decode(
             BinanceBTCPrice.self,
-            from: data
+            from: http.data
         )
         return try binanceBTCPrice.toBTCPrice()
     }

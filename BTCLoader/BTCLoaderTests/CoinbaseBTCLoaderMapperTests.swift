@@ -12,14 +12,14 @@ final class CoinbaseBTCLoaderMapperTests: XCTestCase {
 
     func test_throws_on_non_200_http_response() throws {
         XCTAssertThrowsError(
-            try CoinbaseBTCLoaderMapper.map(non200HTTPResponse, anyData)
+            try CoinbaseBTCLoaderMapper.map(http: (non200HTTPResponse, anyData))
         )
     }
     
     func test_throws_on_200_response_and_empty_data() throws {
         let emptyData = Data()
         XCTAssertThrowsError(
-            try CoinbaseBTCLoaderMapper.map(validHTTPResponse, emptyData)
+            try CoinbaseBTCLoaderMapper.map(http: (validHTTPResponse, emptyData))
         )
     }
     
@@ -27,7 +27,7 @@ final class CoinbaseBTCLoaderMapperTests: XCTestCase {
         let expectedBTCPrice = anyBTCPrice
         
         let decodedBTCprice = try CoinbaseBTCLoaderMapper.map(
-            validHTTPResponse, expectedBTCPrice.encoded
+            http: (validHTTPResponse, expectedBTCPrice.encoded)
         )
         
         XCTAssertEqual(decodedBTCprice, expectedBTCPrice.decoded)
