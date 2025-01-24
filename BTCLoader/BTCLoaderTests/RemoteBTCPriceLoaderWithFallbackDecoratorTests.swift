@@ -63,6 +63,19 @@ final class RemoteBTCPriceLoaderWithFallbackDecoratorTests: XCTestCase {
         
         XCTAssertEqual(result, secondaryBTCPrice)
     }
+    
+    func test_throws_on_primary_and_secondary_loader_failure() async throws {
+        let sut = makeSUT(
+            primaryLoaderResult: .failure(.connectivity),
+            secondaryLoaderResult: .failure(.connectivity)
+        )
+        
+        await XCTAssertThrowsError(
+            try await sut.loadBTCPrice()
+        ) { error in
+            XCTAssertEqual(error as? RemoteBTCPriceLoaderError, .connectivity)
+        }
+    }
 }
 
 extension RemoteBTCPriceLoaderWithFallbackDecoratorTests {
