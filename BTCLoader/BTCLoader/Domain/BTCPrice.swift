@@ -15,7 +15,7 @@ enum Currency {
     }
 }
 
-struct BTCPrice: Equatable {
+public struct BTCPrice: Equatable {
     let amount: Double
     let currency: Currency
 }
