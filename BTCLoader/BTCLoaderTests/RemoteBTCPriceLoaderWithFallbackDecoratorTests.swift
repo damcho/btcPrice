@@ -27,7 +27,11 @@ struct RemoteBTCPriceLoaderWithFallbackDecorator {
 
 extension RemoteBTCPriceLoaderWithFallbackDecorator: BTCPriceLoadable {
     func loadBTCPrice() async throws(RemoteBTCPriceLoaderError) -> BTCPrice {
-        return try await primaryLoader.loadBTCPrice()
+        do {
+            return try await primaryLoader.loadBTCPrice()
+        } catch {
+            return try await secodaryLoader.loadBTCPrice()
+        }
     }
 }
 
@@ -46,7 +50,19 @@ final class RemoteBTCPriceLoaderWithFallbackDecoratorTests: XCTestCase {
         
         XCTAssertEqual(result, primaryBTCPrice)
     }
+    
+    func test_secondary_btc_price_on_primary_load_failure() async throws {
+        let secondaryBTCPrice = BTCPrice(amount: 99, currency: .USD)
 
+        let sut = makeSUT(
+            primaryLoaderResult: .failure(.connectivity),
+            secondaryLoaderResult: .success(secondaryBTCPrice)
+        )
+        
+        let result = try await sut.loadBTCPrice()
+        
+        XCTAssertEqual(result, secondaryBTCPrice)
+    }
 }
 
 extension RemoteBTCPriceLoaderWithFallbackDecoratorTests {
