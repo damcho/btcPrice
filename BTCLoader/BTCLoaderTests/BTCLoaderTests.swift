@@ -14,7 +14,7 @@ final class BTCLoaderTests: XCTestCase {
             for: {_, _ in throw RemoteBTCPriceLoaderError.decoding }
         )
 
-        await XCTAssertThrowsError(
+        await AsyncXCTAssertThrowsError(
             try await sut.loadBTCPrice()
         ){ error in
             XCTAssertEqual(error as? RemoteBTCPriceLoaderError, RemoteBTCPriceLoaderError.decoding)
@@ -25,7 +25,7 @@ final class BTCLoaderTests: XCTestCase {
         let sut = makeSUT(
             httpResult: .failure(anyHTTPError)
         )
-        await XCTAssertThrowsError(
+        await AsyncXCTAssertThrowsError(
             try await sut.loadBTCPrice()
         ) { error in
             XCTAssertEqual(error as? RemoteBTCPriceLoaderError, RemoteBTCPriceLoaderError.connectivity)

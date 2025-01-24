@@ -43,7 +43,7 @@ final class RemoteBTCPriceLoaderWithFallbackDecoratorTests: XCTestCase {
             secondaryLoaderResult: .failure(.connectivity)
         )
         
-        await XCTAssertThrowsError(
+        await AsyncXCTAssertThrowsError(
             try await sut.loadBTCPrice()
         ) { error in
             XCTAssertEqual(error as? RemoteBTCPriceLoaderError, .connectivity)

@@ -7,7 +7,7 @@
 import XCTest
 
 extension XCTest {
-    func XCTAssertThrowsError(
+    func AsyncXCTAssertThrowsError(
         _ expression: @autoclosure () async throws -> some Sendable,
         _ message: @autoclosure () -> String = "This call should throw an error.",
         file: StaticString = #filePath,
