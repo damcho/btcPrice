@@ -8,33 +8,6 @@
 import XCTest
 @testable import BTCLoader
 
-protocol BTCPriceLoadable {
-    func loadBTCPrice() async throws(RemoteBTCPriceLoaderError) -> BTCPrice
-}
-
-struct RemoteBTCPriceLoaderWithFallbackDecorator {
-    let primaryLoader: BTCPriceLoadable
-    let secodaryLoader: BTCPriceLoadable
-    
-    init (
-        primaryLoader: BTCPriceLoadable,
-        secondaryLoader: BTCPriceLoadable
-    ) {
-        self.primaryLoader = primaryLoader
-        self.secodaryLoader = secondaryLoader
-    }
-}
-
-extension RemoteBTCPriceLoaderWithFallbackDecorator: BTCPriceLoadable {
-    func loadBTCPrice() async throws(RemoteBTCPriceLoaderError) -> BTCPrice {
-        do {
-            return try await primaryLoader.loadBTCPrice()
-        } catch {
-            return try await secodaryLoader.loadBTCPrice()
-        }
-    }
-}
-
 final class RemoteBTCPriceLoaderWithFallbackDecoratorTests: XCTestCase {
 
     func test_loads_btc_price_on_primary_loader_success() async throws {
