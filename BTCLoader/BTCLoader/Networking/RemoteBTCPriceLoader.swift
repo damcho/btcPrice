@@ -5,6 +5,8 @@
 //  Created by Damian Modernell on 23/1/25.
 //
 
+typealias Mapper = ((HTTPURLResponse, Data)) throws -> BTCPrice
+
 public enum RemoteBTCPriceLoaderError: Error {
     case decoding
     case connectivity
@@ -13,7 +15,7 @@ public enum RemoteBTCPriceLoaderError: Error {
 struct RemoteBTCPriceLoader {
     let httpClient: HTTPClient
     let url: URL
-    let map: ((response: HTTPURLResponse, data: Data)) throws -> BTCPrice
+    let map: Mapper
 }
 
 // MARK: BTCPriceLoadable
