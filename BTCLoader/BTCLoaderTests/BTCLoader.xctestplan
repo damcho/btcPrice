@@ -1,0 +1,25 @@
+{
+  "configurations" : [
+    {
+      "id" : "61FC2271-42E0-4B25-B559-FF063CA54CE3",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:BTCLoader.xcodeproj",
+        "identifier" : "8B13EB412D42C4C700CEAE21",
+        "name" : "BTCLoaderTests"
+      }
+    }
+  ],
+  "version" : 1
+}

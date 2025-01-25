@@ -14,4 +14,7 @@
          location = "group:Empty.swift">
       </FileRef>
    </Group>
+   <FileRef
+      location = "group:BTCLoader/BTCLoaderTests/BTCLoader.xctestplan">
+   </FileRef>
 </Workspace>
