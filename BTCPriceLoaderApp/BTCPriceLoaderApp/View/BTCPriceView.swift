@@ -7,18 +7,19 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct BTCPriceView: View {
+    @State var btcPrice: String = ""
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+            Text(btcPrice)
+                .font(.system(.largeTitle))
         }
         .padding()
     }
 }
 
 #Preview {
-    ContentView()
+    BTCPriceView(
+        btcPrice: "BTC/USD: $104,153.2"
+    )
 }
