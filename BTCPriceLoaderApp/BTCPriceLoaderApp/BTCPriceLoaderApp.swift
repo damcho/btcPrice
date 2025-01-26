@@ -11,7 +11,9 @@ import SwiftUI
 struct BTCPriceLoaderApp: App {
     var body: some Scene {
         WindowGroup {
-            BTCPriceView()
+            BTCPriceView(
+                btcPriceViewModel: BTCPriceViewModel()
+            )
         }
     }
 }

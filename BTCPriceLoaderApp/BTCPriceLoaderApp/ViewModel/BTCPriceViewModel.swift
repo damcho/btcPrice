@@ -12,8 +12,8 @@ struct BTCPriceViewRepresentation {
     let color: Color
 }
 
-final class BTCPriceViewModel {
-    var btcPriceLabel: String = ""
+final class BTCPriceViewModel: ObservableObject {
+    @Published var btcPriceLabel: String = ""
     var btcPrice: BTCPriceViewRepresentation = .init(price: "", color: .black) {
         didSet {
             btcPriceLabel = "BTC/USD: \(btcPrice.price)"

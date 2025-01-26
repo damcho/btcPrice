@@ -8,11 +8,14 @@
 import SwiftUI
 
 struct BTCPriceView: View {
-    @State var btcPrice: String = ""
+    @StateObject var btcPriceViewModel: BTCPriceViewModel
     var body: some View {
         VStack {
-            Text(btcPrice)
+            Text(btcPriceViewModel.btcPriceLabel)
                 .font(.system(.largeTitle))
+                .foregroundStyle(
+                    btcPriceViewModel.btcPrice.color
+                )
         }
         .padding()
     }
@@ -20,6 +23,26 @@ struct BTCPriceView: View {
 
 #Preview {
     BTCPriceView(
-        btcPrice: "BTC/USD: $104,153.2"
+        btcPriceViewModel: BTCPriceViewModel()
+    )
+}
+
+#Preview {
+    let btcPriceViewModel = BTCPriceViewModel()
+    btcPriceViewModel.btcPrice = .init(
+        price: "104,345.5", color: .red
+    )
+    return BTCPriceView(
+        btcPriceViewModel: btcPriceViewModel
+    )
+}
+
+#Preview {
+    let btcPriceViewModel = BTCPriceViewModel()
+    btcPriceViewModel.btcPrice = .init(
+        price: "104,345.5", color: .green
+    )
+    return BTCPriceView(
+        btcPriceViewModel: btcPriceViewModel
     )
 }
