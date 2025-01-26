@@ -9,7 +9,7 @@ import XCTest
 import Foundation
 
 final class BTCPriceErrorViewModel {
-    private(set)var errorLabel: String = "Failed to load BTC price"
+    private(set)var errorLabel: String = ""
     var lastUpdatedBTCPriceDate: Date?
     private let dateformatter: DateFormatter
     
@@ -20,6 +20,8 @@ final class BTCPriceErrorViewModel {
     func displayBTCLoadError() {
         if let alastUpdatedBTCPriceDate = lastUpdatedBTCPriceDate {
             errorLabel = "Failed to update value. Displaying last updated value from \(dateformatter.string(from: alastUpdatedBTCPriceDate))"
+        } else {
+            errorLabel = "Failed to load BTC price"
         }
     }
     
@@ -30,7 +32,13 @@ final class BTCPriceErrorViewModel {
 }
 
 final class BTCPriceErrorViewModelTests: XCTestCase {
+    
+    func test_displays_empty_message_on_initialization() {
+        let btcErrorViewModel = makeSUT()
 
+        XCTAssertTrue(btcErrorViewModel.errorLabel.isEmpty)
+    }
+    
     func test_displays_error_with_no_btc_price_on_no_btc_price_available() {
         let btcErrorViewModel = makeSUT()
         
