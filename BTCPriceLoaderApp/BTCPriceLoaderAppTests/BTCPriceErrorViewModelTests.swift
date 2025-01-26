@@ -22,6 +22,11 @@ final class BTCPriceErrorViewModel {
             errorLabel = "Failed to update value. Displaying last updated value from \(dateformatter.string(from: alastUpdatedBTCPriceDate))"
         }
     }
+    
+    func hideBTCLoadError(at date: Date) {
+        lastUpdatedBTCPriceDate = date
+        errorLabel = ""
+    }
 }
 
 final class BTCPriceErrorViewModelTests: XCTestCase {
@@ -36,12 +41,20 @@ final class BTCPriceErrorViewModelTests: XCTestCase {
     
     func test_displays_error_with_btc_price_on_btc_price_available() {
         let btcErrorViewModel = makeSUT()
-        btcErrorViewModel.lastUpdatedBTCPriceDate = randomDate.date
+        btcErrorViewModel.hideBTCLoadError(at: randomDate.date)
         
         btcErrorViewModel.displayBTCLoadError()
         
         XCTAssertEqual(btcErrorViewModel.errorLabel, "Failed to update value. Displaying last updated value from \(randomDate.stringRepresentation)")
     }
+    
+    func test_empty_error_on_hide_error_called() {
+        let btcErrorViewModel = makeSUT()
+        btcErrorViewModel.hideBTCLoadError(at: randomDate.date)
+
+        XCTAssertEqual(btcErrorViewModel.errorLabel, "")
+    }
+
 }
 
 extension BTCPriceErrorViewModelTests {
