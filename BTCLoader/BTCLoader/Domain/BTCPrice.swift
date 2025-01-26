@@ -5,7 +5,7 @@
 //  Created by Damian Modernell on 23/1/25.
 //
 
-enum Currency {
+public enum Currency {
     case USD
 
     var name: String {
@@ -16,6 +16,11 @@ enum Currency {
 }
 
 public struct BTCPrice: Equatable {
-    let amount: Double
-    let currency: Currency
+    public let amount: Double
+    public let currency: Currency
+
+    public init(amount: Double, currency: Currency) {
+        self.amount = amount
+        self.currency = currency
+    }
 }
