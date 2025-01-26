@@ -64,4 +64,12 @@ extension BTCPriceErrorViewModelTests {
             dateFormatter.string(from: aDate)
         )
     }
+    
+    var randomDatePlusOneSecond: (date: Date, stringRepresentation: String) {
+        let randomDate = randomDate.date.addingTimeInterval(1)
+        return (
+            randomDate,
+            dateFormatter.string(from: randomDate)
+        )
+    }
 }
