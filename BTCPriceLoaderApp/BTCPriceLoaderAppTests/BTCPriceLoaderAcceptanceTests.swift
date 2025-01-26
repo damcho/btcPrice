@@ -22,8 +22,8 @@ struct BTCLoaderAdapter {
 final class BTCPriceLoaderAcceptanceTests: XCTestCase {
 
     func test_displays_error_view_with_no_timestamp_on_no_network_connection() async {
-        let (sut, _, btcPriceErrorView) = makeSUT(
-            httpClientStub: .failure(.timeout)
+        let (sut, _, btcPriceErrorView, _) = makeSUT(
+            btcloadableStub: .failure(.connectivity)
         )
         
         await sut.load()
@@ -34,26 +34,28 @@ final class BTCPriceLoaderAcceptanceTests: XCTestCase {
 
 extension BTCPriceLoaderAcceptanceTests {
     private func makeSUT(
-        httpClientStub: Result<(HTTPURLResponse, Data), HTTPClientError>
-    ) -> (BTCLoaderAdapter, BTCPriceViewModel, BTCPriceErrorViewModel) {
+        btcloadableStub: Result<BTCPrice, RemoteBTCPriceLoaderError>
+    ) -> (BTCLoaderAdapter, BTCPriceViewModel, BTCPriceErrorViewModel, BTCPriceLoadableStub) {
         let btcPriceViewModel = BTCPriceViewModel()
         let btcPriceErrorViewModel = BTCPriceErrorViewModel()
+        let btcLoadableStub = BTCPriceLoadableStub(
+            stub: btcloadableStub
+        )
         let loaderAdapter = BTCLoaderAdapter(
-            loader: BTCPriceLoaderUtility.makeLoader(
-                with: HTTPClientStub(
-                    stub: httpClientStub
-                )
-            ),
+            loader: btcLoadableStub,
             btcPriceViewModel: btcPriceViewModel,
             btcPriceErrorViewModel: btcPriceErrorViewModel
         )
-        return (loaderAdapter, btcPriceViewModel, btcPriceErrorViewModel)
+        return (loaderAdapter, btcPriceViewModel, btcPriceErrorViewModel, btcLoadableStub)
     }
 }
 
-struct HTTPClientStub: HTTPClient {
-    let stub: Result<(HTTPURLResponse, Data), HTTPClientError>
-    func load(url: URL) async throws(BTCLoader.HTTPClientError) -> (HTTPURLResponse, Data) {
+class BTCPriceLoadableStub: BTCPriceLoadable {
+    var stub: Result<BTCPrice, RemoteBTCPriceLoaderError>
+    init(stub: Result<BTCPrice, RemoteBTCPriceLoaderError>) {
+        self.stub = stub
+    }
+    func loadBTCPrice() async throws(BTCLoader.RemoteBTCPriceLoaderError) -> BTCLoader.BTCPrice {
         try stub.get()
     }
 }
