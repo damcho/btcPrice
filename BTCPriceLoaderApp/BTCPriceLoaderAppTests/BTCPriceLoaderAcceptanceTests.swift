@@ -17,6 +17,7 @@ struct BTCLoaderAdapter {
     func load() async {
         do {
             let btcPrice = try await loader.loadBTCPrice()
+            btcPriceErrorViewModel.hideBTCLoadError(at: .now)
             btcPriceViewModel.btcPrice = BTCPriceViewRepresentation(
                 price: "$\(btcPrice.amount)",
                 color: .black
@@ -50,6 +51,30 @@ final class BTCPriceLoaderAcceptanceTests: XCTestCase {
             btcPriceViewModel.btcPrice,
             BTCPriceViewRepresentation(price: "$\(anyBTCPrice.amount)", color: .black)
         )
+    }
+    
+    
+    func test_empty_error_label_on_successful_btc_price_load() async {
+        let (sut, _, btcPriceErrorView, _) = makeSUT(
+            btcloadableStub: .success(anyBTCPrice)
+        )
+        XCTAssertTrue(btcPriceErrorView.errorLabel.isEmpty)
+
+        await sut.load()
+        
+        XCTAssertTrue(btcPriceErrorView.errorLabel.isEmpty)
+    }
+    
+    func test_empty_error_label_after_successful_btc_price_load() async {
+        let (sut, _, btcPriceErrorView, btcLoadableStub) = makeSUT(
+            btcloadableStub: .failure(.connectivity)
+        )
+        await sut.load()
+        btcLoadableStub.stub = .success(anyBTCPrice)
+
+        await sut.load()
+
+        XCTAssertTrue(btcPriceErrorView.errorLabel.isEmpty)
     }
 }
 
