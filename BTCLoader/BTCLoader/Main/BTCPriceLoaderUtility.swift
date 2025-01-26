@@ -5,7 +5,7 @@
 //  Created by Damian Modernell on 24/1/25.
 //
 
-enum BTCPriceLoaderUtility {
+public enum BTCPriceLoaderUtility {
     static func binanceLoader(with httpClient: HTTPClient) -> BTCPriceLoadable {
         RemoteBTCPriceLoader(
             httpClient: httpClient,

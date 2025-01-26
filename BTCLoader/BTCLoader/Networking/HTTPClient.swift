@@ -5,10 +5,10 @@
 //  Created by Damian Modernell on 23/1/25.
 //
 
-enum HTTPClientError: Error {
+public enum HTTPClientError: Error {
     case timeout
 }
 
-protocol HTTPClient {
+public protocol HTTPClient {
     func load(url: URL) async throws(HTTPClientError) -> (HTTPURLResponse, Data)
 }
