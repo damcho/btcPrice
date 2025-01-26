@@ -7,7 +7,7 @@
 import Foundation
 import SwiftUI
 
-struct BTCPriceViewRepresentation {
+struct BTCPriceViewRepresentation: Equatable {
     let price: String
     let color: Color
 }

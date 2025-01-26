@@ -15,7 +15,15 @@ struct BTCLoaderAdapter {
     let btcPriceErrorViewModel: BTCPriceErrorViewModel
     
     func load() async {
-        btcPriceErrorViewModel.displayBTCLoadError()
+        do {
+            let btcPrice = try await loader.loadBTCPrice()
+            btcPriceViewModel.btcPrice = BTCPriceViewRepresentation(
+                price: "$\(btcPrice.amount)",
+                color: .black
+            )
+        } catch {
+            btcPriceErrorViewModel.displayBTCLoadError()
+        }
     }
 }
 
@@ -29,6 +37,19 @@ final class BTCPriceLoaderAcceptanceTests: XCTestCase {
         await sut.load()
         
         XCTAssertEqual(btcPriceErrorView.errorLabel, "Failed to load BTC price")
+    }
+    
+    func test_displays_btc_price_on_successful_remote_load() async {
+        let (sut, btcPriceViewModel, _, _) = makeSUT(
+            btcloadableStub: .success(anyBTCPrice)
+        )
+        
+        await sut.load()
+        
+        XCTAssertEqual(
+            btcPriceViewModel.btcPrice,
+            BTCPriceViewRepresentation(price: "$\(anyBTCPrice.amount)", color: .black)
+        )
     }
 }
 
@@ -58,4 +79,8 @@ class BTCPriceLoadableStub: BTCPriceLoadable {
     func loadBTCPrice() async throws(BTCLoader.RemoteBTCPriceLoaderError) -> BTCLoader.BTCPrice {
         try stub.get()
     }
+}
+
+var anyBTCPrice: BTCPrice {
+    BTCPrice(amount: 10, currency: .USD)
 }
