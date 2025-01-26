@@ -9,24 +9,17 @@ import XCTest
 @testable import BTCPriceLoaderApp
 @testable import BTCLoader
 
-struct BTCPriceViewRepresentation {
-    let price: String
-    let color: UIColor
-}
-
-final class BTCPriceViewModel {
-    var btcPriceLabel: String = ""
-    var btcPrice: BTCPriceViewRepresentation = .init(price: "", color: .black) {
-        didSet {
-            btcPriceLabel = "BTC/USD: \(btcPrice.price)"
-        }
-    }
-}
-
 final class BTCPriceViewModelTests: XCTestCase {
     func test_displays_empty_string_on_initialization() {
         let bTCPriceViewModel = BTCPriceViewModel()
         XCTAssertEqual(bTCPriceViewModel.btcPrice.color, .black)
         XCTAssertEqual(bTCPriceViewModel.btcPrice.price, "")
+    }
+    
+    func test_displays_btc_price_on_new_btc_price_set() {
+        let bTCPriceViewModel = BTCPriceViewModel()
+        bTCPriceViewModel.btcPrice = .init(price: "123", color: .red)
+        
+        XCTAssertEqual(bTCPriceViewModel.btcPriceLabel, "BTC/USD: 123")
     }
 }
