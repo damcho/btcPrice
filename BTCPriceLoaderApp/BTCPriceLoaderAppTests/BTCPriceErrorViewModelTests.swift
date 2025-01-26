@@ -55,6 +55,17 @@ final class BTCPriceErrorViewModelTests: XCTestCase {
         XCTAssertEqual(btcErrorViewModel.errorLabel, "")
     }
 
+    func test_updates_last_btc_loaded_timestamp_on_multiple_error_calls() {
+        let btcErrorViewModel = makeSUT()
+        btcErrorViewModel.hideBTCLoadError(at: randomDate.date)
+        btcErrorViewModel.displayBTCLoadError()
+        XCTAssertEqual(btcErrorViewModel.errorLabel, "Failed to update value. Displaying last updated value from \(randomDate.stringRepresentation)")
+        
+        btcErrorViewModel.hideBTCLoadError(at: randomDatePlusOneSecond.date)
+        btcErrorViewModel.displayBTCLoadError()
+        
+        XCTAssertEqual(btcErrorViewModel.errorLabel, "Failed to update value. Displaying last updated value from \(randomDatePlusOneSecond.stringRepresentation)")
+    }
 }
 
 extension BTCPriceErrorViewModelTests {
