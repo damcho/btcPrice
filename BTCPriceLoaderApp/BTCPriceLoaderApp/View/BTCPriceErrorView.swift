@@ -8,13 +8,43 @@
 import SwiftUI
 
 struct BTCPriceErrorView: View {
+    @StateObject var errorViewModel: BTCPriceErrorViewModel
     var body: some View {
-        Text("Failed to update value. Displaying last updated value from Jan 24th, 21:07")
+        Text(errorViewModel.errorLabel)
             .font(.system(.subheadline))
             .multilineTextAlignment(.center)
     }
 }
 
+var dateFormatter: DateFormatter {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "yyyy/MM/dd HH:mm"
+    return formatter
+}
+
 #Preview {
-    BTCPriceErrorView()
+    BTCPriceErrorView(
+        errorViewModel: .init(dateFormatter: .init())
+    )
+}
+
+#Preview {
+    let viewModel = BTCPriceErrorViewModel(
+        dateFormatter: dateFormatter
+    )
+    viewModel.displayBTCLoadError()
+    return BTCPriceErrorView(
+        errorViewModel: viewModel
+    )
+}
+
+#Preview {
+    let viewModel = BTCPriceErrorViewModel(
+        dateFormatter: dateFormatter
+    )
+    viewModel.hideBTCLoadError(at: .now)
+    viewModel.displayBTCLoadError()
+    return BTCPriceErrorView(
+        errorViewModel: viewModel
+    )
 }
