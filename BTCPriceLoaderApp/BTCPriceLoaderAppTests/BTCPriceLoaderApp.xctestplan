@@ -1,0 +1,29 @@
+{
+  "configurations" : [
+    {
+      "id" : "A1E7CE1D-56A5-4C5E-868E-73598F2F122F",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:BTCPriceLoaderApp.xcodeproj",
+      "identifier" : "8B1EB3CF2D458CFF0055F1A7",
+      "name" : "BTCPriceLoaderApp"
+    }
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:BTCPriceLoaderApp.xcodeproj",
+        "identifier" : "8B1EB3DF2D458D000055F1A7",
+        "name" : "BTCPriceLoaderAppTests"
+      }
+    }
+  ],
+  "version" : 1
+}
