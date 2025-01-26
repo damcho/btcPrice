@@ -65,7 +65,7 @@ final class BTCPriceLoaderAcceptanceTests: XCTestCase {
         XCTAssertTrue(btcPriceErrorView.errorLabel.isEmpty)
     }
     
-    func test_empty_error_label_after_successful_btc_price_load() async {
+    func test_empty_error_label_after_showing_error_and_successful_btc_price_load() async {
         let (sut, _, btcPriceErrorView, btcLoadableStub) = makeSUT(
             btcloadableStub: .failure(.connectivity)
         )
