@@ -11,12 +11,7 @@ import SwiftUI
 struct BTCPriceLoaderApp: App {
     var body: some Scene {
         WindowGroup {
-            BTCPriceView(
-                btcPriceViewModel: BTCPriceViewModel(),
-                errorView: BTCPriceErrorView(
-                    errorViewModel: BTCPriceErrorViewModel()
-                )
-            )
+            BTCAppComposer.compose()
         }
     }
 }
