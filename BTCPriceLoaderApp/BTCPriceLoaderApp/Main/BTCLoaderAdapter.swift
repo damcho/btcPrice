@@ -13,16 +13,21 @@ struct BTCLoaderAdapter {
     let btcPriceViewModel: BTCPriceViewModel
     let btcPriceErrorViewModel: BTCPriceErrorViewModel
     
-    func load() async {
-        do {
-            let btcPrice = try await loader.loadBTCPrice()
-            btcPriceErrorViewModel.hideBTCLoadError(at: .now)
-            btcPriceViewModel.btcPrice = BTCPriceViewRepresentation(
-                price: "\(btcPrice.amount)",
-                color: .black
-            )
-        } catch {
-            btcPriceErrorViewModel.displayBTCLoadError()
+    func load() -> Task<Void, Never> {
+        Task {
+            do {
+                let btcPrice = try await loader.loadBTCPrice()
+                await MainActor.run {
+                    btcPriceErrorViewModel.hideBTCLoadError(at: .now)
+                    btcPriceViewModel.btcPrice = BTCPriceViewRepresentation(
+                        price: "\(btcPrice.amount)",
+                        color: .black
+                    )
+                }
+            } catch {
+                btcPriceErrorViewModel.displayBTCLoadError()
+            }
         }
+      
     }
 }

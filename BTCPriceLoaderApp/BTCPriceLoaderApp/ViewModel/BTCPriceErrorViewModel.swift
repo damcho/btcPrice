@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class BTCPriceErrorViewModel: ObservableObject {
+class BTCPriceErrorViewModel: ObservableObject {
     @Published private(set)var errorLabel: String = ""
     var lastUpdatedBTCPriceDate: Date?
     private let dateformatter: DateFormatter
