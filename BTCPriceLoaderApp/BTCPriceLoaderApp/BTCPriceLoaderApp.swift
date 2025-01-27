@@ -12,7 +12,10 @@ struct BTCPriceLoaderApp: App {
     var body: some Scene {
         WindowGroup {
             BTCPriceView(
-                btcPriceViewModel: BTCPriceViewModel()
+                btcPriceViewModel: BTCPriceViewModel(),
+                errorView: BTCPriceErrorView(
+                    errorViewModel: BTCPriceErrorViewModel()
+                )
             )
         }
     }
