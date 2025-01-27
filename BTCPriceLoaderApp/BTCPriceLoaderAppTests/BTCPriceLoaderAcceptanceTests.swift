@@ -9,25 +9,6 @@ import XCTest
 @testable import BTCPriceLoaderApp
 import BTCLoader
 
-struct BTCLoaderAdapter {
-    let loader: BTCPriceLoadable
-    let btcPriceViewModel: BTCPriceViewModel
-    let btcPriceErrorViewModel: BTCPriceErrorViewModel
-    
-    func load() async {
-        do {
-            let btcPrice = try await loader.loadBTCPrice()
-            btcPriceErrorViewModel.hideBTCLoadError(at: .now)
-            btcPriceViewModel.btcPrice = BTCPriceViewRepresentation(
-                price: "$\(btcPrice.amount)",
-                color: .black
-            )
-        } catch {
-            btcPriceErrorViewModel.displayBTCLoadError()
-        }
-    }
-}
-
 final class BTCPriceLoaderAcceptanceTests: XCTestCase {
 
     func test_displays_error_view_with_no_timestamp_on_no_network_connection() async {
@@ -49,7 +30,7 @@ final class BTCPriceLoaderAcceptanceTests: XCTestCase {
         
         XCTAssertEqual(
             btcPriceViewModel.btcPrice,
-            BTCPriceViewRepresentation(price: "$\(anyBTCPrice.amount)", color: .black)
+            BTCPriceViewRepresentation(price: "\(anyBTCPrice.amount)", color: .black)
         )
     }
     
@@ -76,6 +57,8 @@ final class BTCPriceLoaderAcceptanceTests: XCTestCase {
 
         XCTAssertTrue(btcPriceErrorView.errorLabel.isEmpty)
     }
+    
+    
 }
 
 extension BTCPriceLoaderAcceptanceTests {
