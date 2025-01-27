@@ -68,6 +68,17 @@ final class BTCPriceLoaderAcceptanceTests: XCTestCase {
         
         XCTAssertTrue(btcPriceErrorViewModelTestDouble.isMainThread)
     }
+    
+    func test_dispatches_on_main_thread_on_btc_price_load_failure() async {
+        let (sut, _, btcPriceErrorViewModelTestDouble, _) = makeSUT(
+            btcloadableStub: .failure(.connectivity)
+        )
+        
+        let task = sut.load()
+        await task.value
+        
+        XCTAssertTrue(btcPriceErrorViewModelTestDouble.isMainThread)
+    }
 }
 
 extension BTCPriceLoaderAcceptanceTests {

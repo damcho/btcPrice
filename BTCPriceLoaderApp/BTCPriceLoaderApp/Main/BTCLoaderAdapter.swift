@@ -25,7 +25,9 @@ struct BTCLoaderAdapter {
                     )
                 }
             } catch {
-                btcPriceErrorViewModel.displayBTCLoadError()
+                await MainActor.run {
+                    btcPriceErrorViewModel.displayBTCLoadError()
+                }
             }
         }
       
