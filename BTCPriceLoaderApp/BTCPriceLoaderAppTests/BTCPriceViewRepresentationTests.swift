@@ -25,4 +25,15 @@ final class BTCPriceViewRepresentationTests: XCTestCase {
         
         XCTAssertTrue(newBTCPriceFromOldPrice.color == .green)
     }
+    
+    func test_red_btc_price_representation_on_lower_new_value() {
+        let initialBTCPrice = BTCPriceViewRepresentation(price: 100.0, color: .gray)
+        let lowerPriceThanInitialBTCPrice = 99.0
+        
+        let newBTCPriceFromOldPrice = initialBTCPrice.updateBTCPriceRepresentation(
+            for: lowerPriceThanInitialBTCPrice
+        )
+        
+        XCTAssertTrue(newBTCPriceFromOldPrice.color == .red)
+    }
 }
