@@ -11,12 +11,10 @@ import BTCLoader
 enum BTCAppComposer {
     static let scheduledBTCLoadInterval = 1.0
     
-    static func compose() -> BTCPriceView {
+    static func compose() -> BTCUtilityView {
         let btcErrorViewModel = BTCPriceErrorViewModel()
         let btcPriceViewModel = BTCPriceViewModel()
-        let btcErrorView = BTCPriceErrorView(
-            errorViewModel: btcErrorViewModel
-        )
+      
         let btcPriceScheduler = BTCPriceScheduler(
             repeatTimeInterval: BTCAppComposer.scheduledBTCLoadInterval
         )
@@ -29,9 +27,13 @@ enum BTCAppComposer {
         btcPriceScheduler.schedule {
             _ = btcLoaderAdapter.load()
         }
-        return BTCPriceView(
-            btcPriceViewModel: btcPriceViewModel,
-            errorView: btcErrorView
+        return BTCUtilityView(
+            btcPriceView: BTCPriceView(
+                btcPriceViewModel: btcPriceViewModel
+            ),
+            btcPriceErrorView: BTCPriceErrorView(
+                errorViewModel: btcErrorViewModel
+            )
         )
     }
 }

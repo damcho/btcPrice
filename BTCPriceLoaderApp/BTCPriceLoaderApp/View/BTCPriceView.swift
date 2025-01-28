@@ -9,19 +9,12 @@ import SwiftUI
 
 struct BTCPriceView: View {
     @StateObject var btcPriceViewModel: BTCPriceViewModel
-    let errorView: BTCPriceErrorView
     var body: some View {
-        VStack {
-            errorView
-            Spacer()
-            Text(btcPriceViewModel.btcPriceLabel)
-                .font(.system(.largeTitle))
-                .foregroundStyle(
-                    btcPriceViewModel.btcPrice.color
-                )
-            Spacer()
-        }
-        .padding()
+        Text(btcPriceViewModel.btcPriceLabel)
+            .font(.system(.largeTitle))
+            .foregroundStyle(
+                btcPriceViewModel.btcPrice.color
+        )
     }
 }
 
@@ -30,26 +23,18 @@ struct BTCPriceView: View {
     btcPriceViewModel.btcPrice = .init(
         price: "104,345.5", color: .red
     )
-    let errorViewModel = BTCPriceErrorViewModel()
-    errorViewModel.displayBTCLoadError()
     return BTCPriceView(
-        btcPriceViewModel: btcPriceViewModel,
-        errorView: BTCPriceErrorView(
-            errorViewModel: errorViewModel
-        )
+        btcPriceViewModel: btcPriceViewModel
     )
 }
 
 #Preview {
     let btcPriceViewModel = BTCPriceViewModel()
     btcPriceViewModel.btcPrice = .init(
-        price: "104,345.5", color: .red
+        price: "104,345.5", color: .black
     )
     return BTCPriceView(
-        btcPriceViewModel: btcPriceViewModel,
-        errorView: BTCPriceErrorView(
-            errorViewModel: BTCPriceErrorViewModel()
-        )
+        btcPriceViewModel: btcPriceViewModel
     )
 }
 
@@ -59,9 +44,6 @@ struct BTCPriceView: View {
         price: "104,345.5", color: .green
     )
     return BTCPriceView(
-        btcPriceViewModel: btcPriceViewModel,
-        errorView: BTCPriceErrorView(
-            errorViewModel: BTCPriceErrorViewModel()
-        )
+        btcPriceViewModel: btcPriceViewModel
     )
 }
