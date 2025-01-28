@@ -26,4 +26,7 @@
    <FileRef
       location = "group:BTCPriceLoaderApp/BTCPriceLoaderAppTests/BTCPriceLoaderApp.xctestplan">
    </FileRef>
+   <FileRef
+      location = "group:BTCPriceLoaderApp/BTCPriceLoaderAppTests/BTCUtilityTests.xctestplan">
+   </FileRef>
 </Workspace>

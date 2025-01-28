@@ -1,0 +1,39 @@
+{
+  "configurations" : [
+    {
+      "id" : "0A8FB2CB-73CD-4ADD-9F93-CB0119997292",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:..\/Networking\/Networking.xcodeproj",
+        "identifier" : "8B6B83A22D490F3D00E88E4E",
+        "name" : "NetworkingTests"
+      }
+    },
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:BTCPriceLoaderApp.xcodeproj",
+        "identifier" : "8B1EB3DF2D458D000055F1A7",
+        "name" : "BTCPriceLoaderAppTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:..\/BTCLoader\/BTCLoader.xcodeproj",
+        "identifier" : "8B13EB412D42C4C700CEAE21",
+        "name" : "BTCLoaderTests"
+      }
+    }
+  ],
+  "version" : 1
+}
