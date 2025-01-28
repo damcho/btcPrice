@@ -30,8 +30,8 @@ final class BTCPriceLoaderAcceptanceTests: XCTestCase {
         await sut.load().value
 
         XCTAssertEqual(
-            btcPriceViewModel.btcPrice,
-            BTCPriceViewRepresentation(price: anyBTCPrice.amount, color: .black)
+            btcPriceViewModel.btcPrice.stringPriceRepresentation,
+            BTCPriceViewRepresentation(price: anyBTCPrice.amount, color: .black).stringPriceRepresentation
         )
     }
     

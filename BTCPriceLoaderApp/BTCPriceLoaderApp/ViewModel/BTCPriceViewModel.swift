@@ -10,7 +10,7 @@ final class BTCPriceViewModel: ObservableObject {
     @Published var btcPriceLabel: String = ""
     var btcPrice: BTCPriceViewRepresentation = .init(price: 0, color: .black) {
         didSet {
-            btcPriceLabel = "BTC/USD: \(btcPrice.stringPriceRepresentation)"
+            btcPriceLabel = "BTC/\(btcPrice.currency.code): \(btcPrice.stringPriceRepresentation)"
         }
     }
 }

@@ -11,7 +11,7 @@ import BTCLoader
 
 struct BTCPriceViewRepresentation: Equatable {
     private let price: Double
-    private let currency: Currency
+    let currency: Currency
     let color: Color
     
     var stringPriceRepresentation: String {
