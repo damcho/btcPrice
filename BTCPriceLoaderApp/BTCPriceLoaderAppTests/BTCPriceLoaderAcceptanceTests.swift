@@ -31,7 +31,7 @@ final class BTCPriceLoaderAcceptanceTests: XCTestCase {
 
         XCTAssertEqual(
             btcPriceViewModel.btcPrice,
-            BTCPriceViewRepresentation(price: "\(anyBTCPrice.amount)", color: .black)
+            BTCPriceViewRepresentation(price: anyBTCPrice.amount, color: .black)
         )
     }
     

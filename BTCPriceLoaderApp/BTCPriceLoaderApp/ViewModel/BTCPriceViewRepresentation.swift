@@ -7,8 +7,20 @@
 
 import Foundation
 import SwiftUI
+import BTCLoader
 
 struct BTCPriceViewRepresentation: Equatable {
-    let price: String
+    private let price: Double
+    private let currency: Currency
     let color: Color
+    
+    var stringPriceRepresentation: String {
+        price.formatted(.currency(code: currency.code).presentation(.narrow))
+    }
+    
+    init(price: Double, currency: Currency = .USD, color: Color) {
+        self.price = price
+        self.color = color
+        self.currency = currency
+    }
 }

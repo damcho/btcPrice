@@ -8,9 +8,9 @@ import Foundation
 
 final class BTCPriceViewModel: ObservableObject {
     @Published var btcPriceLabel: String = ""
-    var btcPrice: BTCPriceViewRepresentation = .init(price: "", color: .black) {
+    var btcPrice: BTCPriceViewRepresentation = .init(price: 0, color: .black) {
         didSet {
-            btcPriceLabel = "BTC/USD: \(btcPrice.price)"
+            btcPriceLabel = "BTC/USD: \(btcPrice.stringPriceRepresentation)"
         }
     }
 }

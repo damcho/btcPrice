@@ -8,7 +8,7 @@
 public enum Currency {
     case USD
 
-    var name: String {
+    public var code: String {
         switch self {
         case .USD: "USD"
         }

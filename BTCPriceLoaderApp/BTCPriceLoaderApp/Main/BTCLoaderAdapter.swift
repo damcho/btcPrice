@@ -20,7 +20,7 @@ struct BTCLoaderAdapter {
                 await MainActor.run {
                     btcPriceErrorViewModel.hideBTCLoadError(at: .now)
                     btcPriceViewModel.btcPrice = BTCPriceViewRepresentation(
-                        price: "\(btcPrice.amount)",
+                        price: btcPrice.amount,
                         color: .black
                     )
                 }

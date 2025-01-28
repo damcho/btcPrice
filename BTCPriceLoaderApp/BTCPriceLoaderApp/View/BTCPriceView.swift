@@ -21,7 +21,7 @@ struct BTCPriceView: View {
 #Preview {
     let btcPriceViewModel = BTCPriceViewModel()
     btcPriceViewModel.btcPrice = .init(
-        price: "104,345.5", color: .red
+        price: 104345.3, color: .red
     )
     return BTCPriceView(
         btcPriceViewModel: btcPriceViewModel
@@ -31,7 +31,7 @@ struct BTCPriceView: View {
 #Preview {
     let btcPriceViewModel = BTCPriceViewModel()
     btcPriceViewModel.btcPrice = .init(
-        price: "104,345.5", color: .black
+        price: 104345.5, color: .black
     )
     return BTCPriceView(
         btcPriceViewModel: btcPriceViewModel
@@ -41,7 +41,7 @@ struct BTCPriceView: View {
 #Preview {
     let btcPriceViewModel = BTCPriceViewModel()
     btcPriceViewModel.btcPrice = .init(
-        price: "104,345.5", color: .green
+        price: 104345.5, color: .green
     )
     return BTCPriceView(
         btcPriceViewModel: btcPriceViewModel
