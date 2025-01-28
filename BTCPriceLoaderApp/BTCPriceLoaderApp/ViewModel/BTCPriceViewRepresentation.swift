@@ -23,4 +23,24 @@ struct BTCPriceViewRepresentation: Equatable {
         self.color = color
         self.currency = currency
     }
+    
+    func updateBTCPriceRepresentation(for newPrice: Double) -> BTCPriceViewRepresentation {
+        .init(
+            price: newPrice,
+            currency: currency,
+            color: colorFor(
+                newBTCPrice: newPrice
+            )
+        )
+    }
+    
+    private func colorFor(newBTCPrice: Double) -> Color {
+        if newBTCPrice == price {
+            .black
+        } else if newBTCPrice > price {
+            .green
+        } else {
+            .red
+        }
+    }
 }
