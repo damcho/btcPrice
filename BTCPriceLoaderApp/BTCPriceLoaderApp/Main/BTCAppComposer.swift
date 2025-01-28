@@ -7,6 +7,7 @@
 
 import Foundation
 import BTCLoader
+import Networking
 
 enum BTCAppComposer {
     static let scheduledBTCLoadInterval = 1.0
@@ -16,6 +17,12 @@ enum BTCAppComposer {
         formatter.dateFormat = "yyyy/MM/dd HH:mm"
         return formatter
     }
+    
+    static let urlSessionHttpClient = URLSessionHTTPClient(
+        session: URLSession(
+            configuration: URLSessionHTTPClient.oneSecondTimeoutConfiguration
+        )
+    )
     
     static func compose() -> BTCUtilityView {
         let btcErrorViewModel = BTCPriceErrorViewModel(
@@ -27,7 +34,9 @@ enum BTCAppComposer {
             repeatTimeInterval: BTCAppComposer.scheduledBTCLoadInterval
         )
         let btcLoaderAdapter = BTCLoaderAdapter(
-            loader: SuccessfulLoader(),
+            loader: BTCPriceLoaderUtility.makeLoader(
+                with: urlSessionHttpClient
+            ),
             btcPriceViewModel: btcPriceViewModel,
             btcPriceErrorViewModel: btcErrorViewModel
         )
@@ -43,11 +52,5 @@ enum BTCAppComposer {
                 errorViewModel: btcErrorViewModel
             )
         )
-    }
-}
-
-struct SuccessfulLoader: BTCPriceLoadable {
-    func loadBTCPrice() async throws(RemoteBTCPriceLoaderError) -> BTCPrice {
-        BTCPrice(amount: 10.3, currency: .USD)
     }
 }
