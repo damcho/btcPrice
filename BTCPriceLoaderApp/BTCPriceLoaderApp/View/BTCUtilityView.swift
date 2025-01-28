@@ -43,14 +43,18 @@ struct BTCUtilityView: View {
     btcPriceViewModel.btcPrice = .init(
         price: "104,345.5", color: .red
     )
+
+    let errorViewModel = BTCPriceErrorViewModel(
+        dateFormatter: BTCAppComposer.errorViewModelDateFormatter
+    )
+    errorViewModel.hideBTCLoadError(at: .now)
+    errorViewModel.displayBTCLoadError()
     return BTCUtilityView(
         btcPriceView: BTCPriceView(
             btcPriceViewModel: btcPriceViewModel
         ),
         btcPriceErrorView: BTCPriceErrorView(
-            errorViewModel: BTCPriceErrorViewModel(
-                dateFormatter: BTCAppComposer.errorViewModelDateFormatter
-            )
+            errorViewModel: errorViewModel
         )
     )
 }
