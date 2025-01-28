@@ -7,6 +7,7 @@
 
 import XCTest
 @testable import BTCPriceLoaderApp
+import SwiftUICore
 
 final class BTCPriceViewRepresentationTests: XCTestCase {
 
@@ -15,25 +16,24 @@ final class BTCPriceViewRepresentationTests: XCTestCase {
         XCTAssertEqual(representation.stringPriceRepresentation, "$100.00")
     }
 
-    func test_green_btc_price_representation_on_higher_new_value() {
-        let initialBTCPrice = BTCPriceViewRepresentation(price: 100.0, color: .gray)
-        let higherPriceThanInitialBTCPrice = 101.0
-        
-        let newBTCPriceFromOldPrice = initialBTCPrice.updateBTCPriceRepresentation(
-            for: higherPriceThanInitialBTCPrice
-        )
-        
-        XCTAssertTrue(newBTCPriceFromOldPrice.color == .green)
+    func test_price_representation_color_on_new_btc_value() {
+        expect(.green, initialBTCPrice: 100.0, newBTCPrice: 101.0)
+        expect(.red, initialBTCPrice: 100.0, newBTCPrice: 99.0)
+        expect(.black, initialBTCPrice: 100.0, newBTCPrice: 100.0)
     }
-    
-    func test_red_btc_price_representation_on_lower_new_value() {
-        let initialBTCPrice = BTCPriceViewRepresentation(price: 100.0, color: .gray)
-        let lowerPriceThanInitialBTCPrice = 99.0
-        
-        let newBTCPriceFromOldPrice = initialBTCPrice.updateBTCPriceRepresentation(
-            for: lowerPriceThanInitialBTCPrice
+}
+
+extension BTCPriceViewRepresentationTests {
+    func expect(_ color: Color, initialBTCPrice: Double, newBTCPrice: Double) {
+        let initialBTCPrice = BTCPriceViewRepresentation(
+            price: initialBTCPrice,
+            color: .gray
         )
         
-        XCTAssertTrue(newBTCPriceFromOldPrice.color == .red)
+        let newBTCPriceFromOldPrice = initialBTCPrice.updateBTCPriceRepresentation(
+            for: newBTCPrice
+        )
+        
+        XCTAssertTrue(newBTCPriceFromOldPrice.color == color)
     }
 }
