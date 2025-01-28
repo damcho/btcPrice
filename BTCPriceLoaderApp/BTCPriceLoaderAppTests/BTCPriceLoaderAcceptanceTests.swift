@@ -8,6 +8,7 @@
 import XCTest
 @testable import BTCPriceLoaderApp
 import BTCLoader
+import Networking
 
 final class BTCPriceLoaderAcceptanceTests: XCTestCase {
 
@@ -69,6 +70,10 @@ final class BTCPriceLoaderAcceptanceTests: XCTestCase {
                 anyBTCPrice
             )
         )
+    }
+    
+    func test_network_timeout() {
+        XCTAssertEqual(URLSessionHTTPClient.oneSecondTimeoutConfiguration.timeoutIntervalForResource, 1)
     }
 }
 
