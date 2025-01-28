@@ -12,7 +12,7 @@ class BTCPriceErrorViewModel: ObservableObject {
     var lastUpdatedBTCPriceDate: Date?
     private let dateformatter: DateFormatter
     
-    init(dateFormatter: DateFormatter = DateFormatter()) {
+    init(dateFormatter: DateFormatter) {
         self.dateformatter = dateFormatter
     }
     

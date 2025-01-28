@@ -86,7 +86,9 @@ extension BTCPriceLoaderAcceptanceTests {
         btcloadableStub: Result<BTCPrice, RemoteBTCPriceLoaderError>
     ) -> (BTCLoaderAdapter, BTCPriceViewModel, BTCPriceErrorViewModelTestDouble, BTCPriceLoadableStub) {
         let btcPriceViewModel = BTCPriceViewModel()
-        let btcPriceErrorViewModel = BTCPriceErrorViewModelTestDouble()
+        let btcPriceErrorViewModel = BTCPriceErrorViewModelTestDouble(
+            dateFormatter: BTCAppComposer.errorViewModelDateFormatter
+        )
         let btcLoadableStub = BTCPriceLoadableStub(
             stub: btcloadableStub
         )

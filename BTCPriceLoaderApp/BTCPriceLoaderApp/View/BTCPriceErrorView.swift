@@ -16,12 +16,6 @@ struct BTCPriceErrorView: View {
     }
 }
 
-var dateFormatter: DateFormatter {
-    let formatter = DateFormatter()
-    formatter.dateFormat = "yyyy/MM/dd HH:mm"
-    return formatter
-}
-
 #Preview {
     BTCPriceErrorView(
         errorViewModel: .init(dateFormatter: .init())
@@ -30,7 +24,7 @@ var dateFormatter: DateFormatter {
 
 #Preview {
     let viewModel = BTCPriceErrorViewModel(
-        dateFormatter: dateFormatter
+        dateFormatter: BTCAppComposer.errorViewModelDateFormatter
     )
     viewModel.displayBTCLoadError()
     return BTCPriceErrorView(
@@ -40,7 +34,7 @@ var dateFormatter: DateFormatter {
 
 #Preview {
     let viewModel = BTCPriceErrorViewModel(
-        dateFormatter: dateFormatter
+        dateFormatter: BTCAppComposer.errorViewModelDateFormatter
     )
     viewModel.hideBTCLoadError(at: .now)
     viewModel.displayBTCLoadError()

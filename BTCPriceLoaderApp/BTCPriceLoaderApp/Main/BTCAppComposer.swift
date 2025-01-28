@@ -11,8 +11,16 @@ import BTCLoader
 enum BTCAppComposer {
     static let scheduledBTCLoadInterval = 1.0
     
+    static var errorViewModelDateFormatter: DateFormatter {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy/MM/dd HH:mm"
+        return formatter
+    }
+    
     static func compose() -> BTCUtilityView {
-        let btcErrorViewModel = BTCPriceErrorViewModel()
+        let btcErrorViewModel = BTCPriceErrorViewModel(
+            dateFormatter: errorViewModelDateFormatter
+        )
         let btcPriceViewModel = BTCPriceViewModel()
       
         let btcPriceScheduler = BTCPriceScheduler(
