@@ -58,26 +58,17 @@ final class BTCPriceLoaderAcceptanceTests: XCTestCase {
         XCTAssertTrue(btcPriceErrorView.errorLabel.isEmpty)
     }
     
-    func test_dispatches_on_main_thread_on_successful_btc_price_load() async {
-        let (sut, _, btcPriceErrorViewModelTestDouble, _) = makeSUT(
-            btcloadableStub: .success(anyBTCPrice)
+    func test_dispatches_on_main_thread_on_btc_price_load() async {
+        await expecttoDispatchOnMainThread(
+            forLoaderResult: .failure(
+                .connectivity
+            )
         )
-        
-        let task = sut.load()
-        await task.value
-        
-        XCTAssertTrue(btcPriceErrorViewModelTestDouble.isMainThread)
-    }
-    
-    func test_dispatches_on_main_thread_on_btc_price_load_failure() async {
-        let (sut, _, btcPriceErrorViewModelTestDouble, _) = makeSUT(
-            btcloadableStub: .failure(.connectivity)
+        await expecttoDispatchOnMainThread(
+            forLoaderResult: .success(
+                anyBTCPrice
+            )
         )
-        
-        let task = sut.load()
-        await task.value
-        
-        XCTAssertTrue(btcPriceErrorViewModelTestDouble.isMainThread)
     }
 }
 
@@ -98,6 +89,17 @@ extension BTCPriceLoaderAcceptanceTests {
             btcPriceErrorViewModel: btcPriceErrorViewModel
         )
         return (loaderAdapter, btcPriceViewModel, btcPriceErrorViewModel, btcLoadableStub)
+    }
+    
+    private func expecttoDispatchOnMainThread(forLoaderResult: Result<BTCPrice, RemoteBTCPriceLoaderError>) async {
+        let (sut, _, btcPriceErrorViewModelTestDouble, _) = makeSUT(
+            btcloadableStub: forLoaderResult
+        )
+        
+        let task = sut.load()
+        await task.value
+        
+        XCTAssertTrue(btcPriceErrorViewModelTestDouble.isMainThread)
     }
 }
 
