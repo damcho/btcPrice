@@ -7,10 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		8B4251502D499D5700E10B6E /* BTCLoader.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B42514F2D499D5700E10B6E /* BTCLoader.framework */; };
-		8B4251512D499D5700E10B6E /* BTCLoader.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8B42514F2D499D5700E10B6E /* BTCLoader.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		8B4251542D499D5E00E10B6E /* Networking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B4251532D499D5E00E10B6E /* Networking.framework */; };
-		8B4251552D499D5E00E10B6E /* Networking.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8B4251532D499D5E00E10B6E /* Networking.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		8B4251952D49CA0400E10B6E /* BTCUtilityCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B4251942D49CA0400E10B6E /* BTCUtilityCore.framework */; };
+		8B4251962D49CA0400E10B6E /* BTCUtilityCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8B4251942D49CA0400E10B6E /* BTCUtilityCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -23,14 +21,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
-		8B4251522D499D5700E10B6E /* Embed Frameworks */ = {
+		8B4251972D49CA0400E10B6E /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				8B4251552D499D5E00E10B6E /* Networking.framework in Embed Frameworks */,
-				8B4251512D499D5700E10B6E /* BTCLoader.framework in Embed Frameworks */,
+				8B4251962D49CA0400E10B6E /* BTCUtilityCore.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -41,6 +38,7 @@
 		8B4251442D499D1D00E10B6E /* BTCPriceCLI */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = BTCPriceCLI; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B42514F2D499D5700E10B6E /* BTCLoader.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = BTCLoader.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B4251532D499D5E00E10B6E /* Networking.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Networking.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8B4251942D49CA0400E10B6E /* BTCUtilityCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = BTCUtilityCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -56,8 +54,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8B4251542D499D5E00E10B6E /* Networking.framework in Frameworks */,
-				8B4251502D499D5700E10B6E /* BTCLoader.framework in Frameworks */,
+				8B4251952D49CA0400E10B6E /* BTCUtilityCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -84,6 +81,7 @@
 		8B42514E2D499D5700E10B6E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8B4251942D49CA0400E10B6E /* BTCUtilityCore.framework */,
 				8B4251532D499D5E00E10B6E /* Networking.framework */,
 				8B42514F2D499D5700E10B6E /* BTCLoader.framework */,
 			);
@@ -100,7 +98,7 @@
 				8B4251402D499D1D00E10B6E /* Sources */,
 				8B4251412D499D1D00E10B6E /* Frameworks */,
 				8B4251422D499D1D00E10B6E /* CopyFiles */,
-				8B4251522D499D5700E10B6E /* Embed Frameworks */,
+				8B4251972D49CA0400E10B6E /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
