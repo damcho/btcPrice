@@ -5,8 +5,8 @@
 //  Created by Damian Modernell on 27/1/25.
 //
 
-import Foundation
 import BTCUtilityCore
+import Foundation
 
 enum BTCAppComposer {
     static var errorViewModelDateFormatter: DateFormatter {
@@ -14,19 +14,19 @@ enum BTCAppComposer {
         formatter.dateFormat = "yyyy/MM/dd HH:mm"
         return formatter
     }
-    
+
     static func compose() -> BTCUtilityView {
         let btcErrorViewModel = BTCPriceErrorViewModel(
             dateFormatter: errorViewModelDateFormatter
         )
         let btcPriceViewModel = BTCPriceViewModel()
-      
+
         BTCCoreComposer.compose(
             for: btcPriceViewModel,
             errorDisplayable: btcErrorViewModel,
             errorRemovable: btcErrorViewModel
         )
-            
+
         return BTCUtilityView(
             btcPriceView: BTCPriceView(
                 btcPriceViewModel: btcPriceViewModel

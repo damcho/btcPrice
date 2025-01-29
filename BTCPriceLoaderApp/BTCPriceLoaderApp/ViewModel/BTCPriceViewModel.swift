@@ -4,9 +4,9 @@
 //
 //  Created by Damian Modernell on 26/1/25.
 //
-import Foundation
 import BTCLoader
 import BTCUtilityCore
+import Foundation
 
 final class BTCPriceViewModel: ObservableObject {
     @Published var btcPriceLabel: String = ""
@@ -16,6 +16,8 @@ final class BTCPriceViewModel: ObservableObject {
         }
     }
 }
+
+// MARK: BTCPriceDisplayable
 
 extension BTCPriceViewModel: BTCPriceDisplayable {
     func display(_ btcPrice: BTCPrice) {

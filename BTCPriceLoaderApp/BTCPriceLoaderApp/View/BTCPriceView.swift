@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  BTCPriceView.swift
 //  BTCPriceLoaderApp
 //
 //  Created by Damian Modernell on 25/1/25.
@@ -14,14 +14,14 @@ struct BTCPriceView: View {
             .font(.system(.largeTitle))
             .foregroundStyle(
                 btcPriceViewModel.btcPrice.color
-        )
+            )
     }
 }
 
 #Preview {
     let btcPriceViewModel = BTCPriceViewModel()
     btcPriceViewModel.btcPrice = .init(
-        price: 104345.3, color: .red
+        price: 104_345.3, color: .red
     )
     return BTCPriceView(
         btcPriceViewModel: btcPriceViewModel
@@ -31,7 +31,7 @@ struct BTCPriceView: View {
 #Preview {
     let btcPriceViewModel = BTCPriceViewModel()
     btcPriceViewModel.btcPrice = .init(
-        price: 104345.5, color: .black
+        price: 104_345.5, color: .black
     )
     return BTCPriceView(
         btcPriceViewModel: btcPriceViewModel
@@ -41,7 +41,7 @@ struct BTCPriceView: View {
 #Preview {
     let btcPriceViewModel = BTCPriceViewModel()
     btcPriceViewModel.btcPrice = .init(
-        price: 104345.5, color: .green
+        price: 104_345.5, color: .green
     )
     return BTCPriceView(
         btcPriceViewModel: btcPriceViewModel
