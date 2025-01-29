@@ -24,30 +24,28 @@ final class BTCPriceErrorViewModelTests: XCTestCase {
         XCTAssertEqual(btcErrorViewModel.errorLabel, "Failed to load BTC price")
     }
     
-    func test_displays_error_with_btc_price_on_btc_price_available() {
+    func test_displays_error_with_btc_price_on_btc_update_timestamp_available() {
         let btcErrorViewModel = makeSUT()
-        btcErrorViewModel.hideBTCLoadError(at: randomDate.date)
         
-        btcErrorViewModel.displayBTCLoadError()
+        btcErrorViewModel.displayBTCLoadError(for: randomDate.date)
         
         XCTAssertEqual(btcErrorViewModel.errorLabel, "Failed to update value. Displaying last updated value from \(randomDate.stringRepresentation)")
     }
     
     func test_empty_error_on_hide_error_called() {
         let btcErrorViewModel = makeSUT()
-        btcErrorViewModel.hideBTCLoadError(at: randomDate.date)
+        btcErrorViewModel.hideBTCLoadError()
 
         XCTAssertEqual(btcErrorViewModel.errorLabel, "")
     }
 
     func test_updates_last_btc_loaded_timestamp_on_multiple_error_calls() {
         let btcErrorViewModel = makeSUT()
-        btcErrorViewModel.hideBTCLoadError(at: randomDate.date)
-        btcErrorViewModel.displayBTCLoadError()
+        btcErrorViewModel.displayBTCLoadError(for: randomDate.date)
         XCTAssertEqual(btcErrorViewModel.errorLabel, "Failed to update value. Displaying last updated value from \(randomDate.stringRepresentation)")
         
-        btcErrorViewModel.hideBTCLoadError(at: randomDatePlusOneSecond.date)
-        btcErrorViewModel.displayBTCLoadError()
+        btcErrorViewModel.hideBTCLoadError()
+        btcErrorViewModel.displayBTCLoadError(for: randomDatePlusOneSecond.date)
         
         XCTAssertEqual(btcErrorViewModel.errorLabel, "Failed to update value. Displaying last updated value from \(randomDatePlusOneSecond.stringRepresentation)")
     }

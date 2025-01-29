@@ -9,23 +9,25 @@ import Foundation
 
 class BTCPriceErrorViewModel: ObservableObject {
     @Published private(set)var errorLabel: String = ""
-    var lastUpdatedBTCPriceDate: Date?
     private let dateformatter: DateFormatter
     
     init(dateFormatter: DateFormatter) {
         self.dateformatter = dateFormatter
     }
     
-    func displayBTCLoadError() {
-        if let alastUpdatedBTCPriceDate = lastUpdatedBTCPriceDate {
-            errorLabel = "Failed to update value. Displaying last updated value from \(dateformatter.string(from: alastUpdatedBTCPriceDate))"
+    func displayBTCLoadError(for timestamp: Date? = nil) {
+        if let atimestamp = timestamp {
+            errorLabel = "Failed to update value. Displaying last updated value from \(dateformatter.string(from: atimestamp))"
         } else {
             errorLabel = "Failed to load BTC price"
         }
     }
     
-    func hideBTCLoadError(at date: Date) {
-        lastUpdatedBTCPriceDate = date
+    func hideBTCLoadError() {
         errorLabel = ""
     }
 }
+
+extension BTCPriceErrorViewModel: BTCPriceErrorDisplayable {}
+
+extension BTCPriceErrorViewModel: BTCPriceErrorRemovable {}

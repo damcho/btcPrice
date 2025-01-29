@@ -8,27 +8,54 @@
 import Foundation
 import BTCLoader
 
-struct BTCLoaderAdapter {
+protocol BTCPriceErrorDisplayable {
+    func displayBTCLoadError(for timestamp: Date?)
+}
+
+protocol BTCPriceErrorRemovable {
+    func hideBTCLoadError()
+}
+
+protocol BTCPriceDisplayable {
+    func display(_ btcPrice: BTCPrice)
+}
+
+final class BTCLoaderAdapter {
     let loader: BTCPriceLoadable
-    let btcPriceViewModel: BTCPriceViewModel
-    let btcPriceErrorViewModel: BTCPriceErrorViewModel
+    let btcPriceDisplayable: BTCPriceDisplayable
+    let btcPriceErrorRemovable: BTCPriceErrorRemovable?
+    let btcPriceErrorDisplayable: BTCPriceErrorDisplayable
+
+    private var lastBTCUpdatedTimestamp: Date?
+    
+    init(
+        loader: BTCPriceLoadable,
+        btcPriceDisplayable: BTCPriceDisplayable,
+        btcPriceErrorDisplayable: BTCPriceErrorDisplayable,
+        btcPriceErrorRemovable: BTCPriceErrorRemovable? = nil
+    ) {
+        self.loader = loader
+        self.btcPriceDisplayable = btcPriceDisplayable
+        self.btcPriceErrorRemovable = btcPriceErrorRemovable
+        self.btcPriceErrorDisplayable = btcPriceErrorDisplayable
+    }
     
     func load() -> Task<Void, Never> {
         Task {
             do {
                 let newBTCPrice = try await loader.loadBTCPrice()
+                lastBTCUpdatedTimestamp = .now
                 await MainActor.run {
-                    btcPriceErrorViewModel.hideBTCLoadError(at: .now)
-                    btcPriceViewModel.btcPrice = btcPriceViewModel.btcPrice.updateBTCPriceRepresentation(
-                        for: newBTCPrice.amount
-                    )
+                    btcPriceErrorRemovable?.hideBTCLoadError()
+                    btcPriceDisplayable.display(newBTCPrice)
                 }
             } catch {
                 await MainActor.run {
-                    btcPriceErrorViewModel.displayBTCLoadError()
+                    btcPriceErrorDisplayable.displayBTCLoadError(
+                        for: lastBTCUpdatedTimestamp
+                    )
                 }
             }
         }
-      
     }
 }

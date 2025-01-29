@@ -26,7 +26,7 @@ struct BTCPriceErrorView: View {
     let viewModel = BTCPriceErrorViewModel(
         dateFormatter: BTCAppComposer.errorViewModelDateFormatter
     )
-    viewModel.displayBTCLoadError()
+    viewModel.displayBTCLoadError(for: nil)
     return BTCPriceErrorView(
         errorViewModel: viewModel
     )
@@ -36,8 +36,7 @@ struct BTCPriceErrorView: View {
     let viewModel = BTCPriceErrorViewModel(
         dateFormatter: BTCAppComposer.errorViewModelDateFormatter
     )
-    viewModel.hideBTCLoadError(at: .now)
-    viewModel.displayBTCLoadError()
+    viewModel.displayBTCLoadError(for: .now)
     return BTCPriceErrorView(
         errorViewModel: viewModel
     )

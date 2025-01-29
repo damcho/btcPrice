@@ -90,8 +90,9 @@ extension BTCPriceLoaderAcceptanceTests {
         )
         let loaderAdapter = BTCLoaderAdapter(
             loader: btcLoadableStub,
-            btcPriceViewModel: btcPriceViewModel,
-            btcPriceErrorViewModel: btcPriceErrorViewModel
+            btcPriceDisplayable: btcPriceViewModel,
+            btcPriceErrorDisplayable: btcPriceErrorViewModel,
+            btcPriceErrorRemovable: btcPriceErrorViewModel
         )
         return (loaderAdapter, btcPriceViewModel, btcPriceErrorViewModel, btcLoadableStub)
     }
@@ -110,13 +111,13 @@ extension BTCPriceLoaderAcceptanceTests {
 
 final class BTCPriceErrorViewModelTestDouble: BTCPriceErrorViewModel {
     var isMainThread = false
-    override func displayBTCLoadError() {
+    override func displayBTCLoadError(for date: Date?) {
         super.displayBTCLoadError()
         isMainThread = Thread.isMainThread
     }
     
-    override func hideBTCLoadError(at date: Date) {
-        super.hideBTCLoadError(at: date)
+    override func hideBTCLoadError() {
+        super.hideBTCLoadError()
         isMainThread = Thread.isMainThread
     }
 }

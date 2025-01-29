@@ -5,6 +5,7 @@
 //  Created by Damian Modernell on 26/1/25.
 //
 import Foundation
+import BTCLoader
 
 final class BTCPriceViewModel: ObservableObject {
     @Published var btcPriceLabel: String = ""
@@ -12,5 +13,13 @@ final class BTCPriceViewModel: ObservableObject {
         didSet {
             btcPriceLabel = "BTC/\(btcPrice.currency.code): \(btcPrice.stringPriceRepresentation)"
         }
+    }
+}
+
+extension BTCPriceViewModel: BTCPriceDisplayable {
+    func display(_ btcPrice: BTCPrice) {
+        self.btcPrice = self.btcPrice.updateBTCPriceRepresentation(
+            for: btcPrice.amount
+        )
     }
 }

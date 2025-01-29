@@ -37,8 +37,9 @@ enum BTCAppComposer {
             loader: BTCPriceLoaderUtility.makeLoader(
                 with: urlSessionHttpClient
             ),
-            btcPriceViewModel: btcPriceViewModel,
-            btcPriceErrorViewModel: btcErrorViewModel
+            btcPriceDisplayable: btcPriceViewModel,
+            btcPriceErrorDisplayable: btcErrorViewModel,
+            btcPriceErrorRemovable: btcErrorViewModel
         )
 
         btcPriceScheduler.schedule {
