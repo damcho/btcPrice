@@ -6,6 +6,7 @@
 //
 import Foundation
 import BTCLoader
+import BTCUtilityCore
 
 final class BTCPriceViewModel: ObservableObject {
     @Published var btcPriceLabel: String = ""

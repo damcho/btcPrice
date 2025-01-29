@@ -8,21 +8,14 @@
 import Foundation
 import BTCLoader
 import Networking
+import BTCUtilityCore
 
-enum BTCAppComposer {
-    static let scheduledBTCLoadInterval = 1.0
-    
+enum BTCAppComposer {    
     static var errorViewModelDateFormatter: DateFormatter {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy/MM/dd HH:mm"
         return formatter
     }
-    
-    static let urlSessionHttpClient = URLSessionHTTPClient(
-        session: URLSession(
-            configuration: URLSessionHTTPClient.oneSecondTimeoutConfiguration
-        )
-    )
     
     static func compose() -> BTCUtilityView {
         let btcErrorViewModel = BTCPriceErrorViewModel(
@@ -30,21 +23,12 @@ enum BTCAppComposer {
         )
         let btcPriceViewModel = BTCPriceViewModel()
       
-        let btcPriceScheduler = BTCPriceScheduler(
-            repeatTimeInterval: BTCAppComposer.scheduledBTCLoadInterval
+        BTCCoreComposer.compose(
+            for: btcPriceViewModel,
+            errorDisplayable: btcErrorViewModel,
+            errorRemovable: btcErrorViewModel
         )
-        let btcLoaderAdapter = BTCLoaderAdapter(
-            loader: BTCPriceLoaderUtility.makeLoader(
-                with: urlSessionHttpClient
-            ),
-            btcPriceDisplayable: btcPriceViewModel,
-            btcPriceErrorDisplayable: btcErrorViewModel,
-            btcPriceErrorRemovable: btcErrorViewModel
-        )
-
-        btcPriceScheduler.schedule {
-            _ = btcLoaderAdapter.load()
-        }
+            
         return BTCUtilityView(
             btcPriceView: BTCPriceView(
                 btcPriceViewModel: btcPriceViewModel

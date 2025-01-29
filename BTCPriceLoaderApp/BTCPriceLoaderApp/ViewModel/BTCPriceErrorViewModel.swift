@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import BTCUtilityCore
 
 class BTCPriceErrorViewModel: ObservableObject {
     @Published private(set)var errorLabel: String = ""
