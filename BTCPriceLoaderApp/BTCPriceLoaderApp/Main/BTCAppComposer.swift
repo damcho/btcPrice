@@ -6,11 +6,9 @@
 //
 
 import Foundation
-import BTCLoader
-import Networking
 import BTCUtilityCore
 
-enum BTCAppComposer {    
+enum BTCAppComposer {
     static var errorViewModelDateFormatter: DateFormatter {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy/MM/dd HH:mm"
