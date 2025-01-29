@@ -1,34 +1,34 @@
 //
-//  BTCAppComposer.swift
+//  BTCCoreComposer.swift
 //  BTCPriceLoaderApp
 //
 //  Created by Damian Modernell on 27/1/25.
 //
 
-import Foundation
 import BTCLoader
+import Foundation
 import Networking
 
 public enum BTCCoreComposer {
     static let scheduledBTCLoadInterval = 1.0
-    
+
     static var errorViewModelDateFormatter: DateFormatter {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy/MM/dd HH:mm"
         return formatter
     }
-    
+
     static let urlSessionHttpClient = URLSessionHTTPClient(
         session: URLSession(
             configuration: URLSessionHTTPClient.oneSecondTimeoutConfiguration
         )
     )
-    
+
     public static func compose(
         for btcDisplayable: BTCPriceDisplayable,
         errorDisplayable: BTCPriceErrorDisplayable,
-        errorRemovable: BTCPriceErrorRemovable? = nil) {
-     
+        errorRemovable: BTCPriceErrorRemovable? = nil
+    ) {
         let btcPriceScheduler = BTCPriceScheduler(
             repeatTimeInterval: BTCCoreComposer.scheduledBTCLoadInterval
         )

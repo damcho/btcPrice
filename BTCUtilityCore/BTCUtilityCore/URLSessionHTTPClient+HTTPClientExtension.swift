@@ -4,8 +4,8 @@
 //
 //  Created by Damian Modernell on 28/1/25.
 //
-import Networking
 import BTCLoader
+import Networking
 
 extension URLSessionHTTPClient: @retroactive HTTPClient {
     public func load(url: URL) async throws(HTTPClientError) -> (HTTPURLResponse, Data) {
@@ -14,7 +14,7 @@ extension URLSessionHTTPClient: @retroactive HTTPClient {
                 continuation.resume(returning: result)
             }
         }
-          
+
         do {
             let aResult = try result.get()
             return (aResult.1, aResult.0)
@@ -22,7 +22,7 @@ extension URLSessionHTTPClient: @retroactive HTTPClient {
             throw .timeout
         }
     }
-    
+
     static var oneSecondTimeoutConfiguration: URLSessionConfiguration {
         let urlSessionConfig = URLSessionConfiguration.default
         urlSessionConfig.timeoutIntervalForResource = 1.0

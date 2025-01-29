@@ -5,8 +5,8 @@
 //  Created by Damian Modernell on 26/1/25.
 //
 
-import Foundation
 import BTCLoader
+import Foundation
 
 public protocol BTCPriceErrorDisplayable {
     func displayBTCLoadError(for timestamp: Date?)
@@ -27,7 +27,7 @@ final class BTCLoaderAdapter {
     let btcPriceErrorDisplayable: BTCPriceErrorDisplayable
 
     private var lastBTCUpdatedTimestamp: Date?
-    
+
     init(
         loader: BTCPriceLoadable,
         btcPriceDisplayable: BTCPriceDisplayable,
@@ -39,7 +39,7 @@ final class BTCLoaderAdapter {
         self.btcPriceErrorRemovable = btcPriceErrorRemovable
         self.btcPriceErrorDisplayable = btcPriceErrorDisplayable
     }
-    
+
     func load() -> Task<Void, Never> {
         Task {
             do {
