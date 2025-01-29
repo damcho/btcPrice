@@ -9,15 +9,15 @@ enum BinanceBTCLoaderMapper {
     struct BinanceBTCPrice: Decodable {
         let price: String
 
-        func toBTCPrice() throws -> BTCPrice {
+        func toBTCPrice() throws -> RemoteBTCPrice {
             guard let aPrice = Double(price) else {
                 throw RemoteBTCPriceLoaderError.decoding
             }
-            return BTCPrice(amount: aPrice, currency: .USD)
+            return RemoteBTCPrice(amount: aPrice, currency: .USD)
         }
     }
 
-    static func map(http: (response: HTTPURLResponse, data: Data)) throws -> BTCPrice {
+    static func map(http: (response: HTTPURLResponse, data: Data)) throws -> RemoteBTCPrice {
         guard http.response.statusCode == 200 else {
             throw RemoteBTCPriceLoaderError.connectivity
         }

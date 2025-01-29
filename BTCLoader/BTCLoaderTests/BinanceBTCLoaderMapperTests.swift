@@ -39,9 +39,9 @@ final class BinanceBTCLoaderMapperTests: XCTestCase {
 }
 
 private extension BinanceBTCLoaderMapperTests {
-    var anyBTCPrice: (decoded: BTCPrice, encoded: Data) {
+    var anyBTCPrice: (decoded: RemoteBTCPrice, encoded: Data) {
         (
-            BTCPrice(amount: 104593.190, currency: .USD),
+            RemoteBTCPrice(amount: 104593.190, currency: .USD),
             #"{"symbol":"BTCUSDT","price":"104593.19000000"}"#.data(using: .utf8)!
         )
     }

@@ -36,7 +36,7 @@ public enum BTCCoreComposer {
             repeatTimeInterval: BTCCoreComposer.scheduledBTCLoadInterval
         )
         let btcLoaderAdapter = BTCLoaderAdapter(
-            loader: BTCPriceLoaderUtility.makeLoader(
+            loader: RemoteBTCPriceLoaderUtility.makeLoader(
                 with: urlSessionHttpClient
             ),
             btcPriceDisplayable: btcDisplayable,

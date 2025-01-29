@@ -7,7 +7,6 @@
 
 import Foundation
 import BTCUtilityCore
-import BTCLoader
 
 struct BTCPriceCLIDisplayable: BTCPriceDisplayable {
     func display(_ btcPrice: BTCPrice) {

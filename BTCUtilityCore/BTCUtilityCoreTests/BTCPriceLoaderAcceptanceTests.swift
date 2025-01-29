@@ -82,7 +82,7 @@ final class BTCPriceLoaderAcceptanceTests: XCTestCase {
 
 extension BTCPriceLoaderAcceptanceTests {
     private func makeSUT(
-        btcloadableStub: Result<BTCPrice, RemoteBTCPriceLoaderError>
+        btcloadableStub: Result<BTCPrice, BTCPriceLoaderError>
     )
         -> (BTCLoaderAdapter, BTCPriceDisplayableSpy, BTCPriceLoadableStub)
     {
@@ -100,7 +100,10 @@ extension BTCPriceLoaderAcceptanceTests {
         return (loaderAdapter, btcDisplayableSpy, btcLoadableStub)
     }
 
-    private func expecttoDispatchOnMainThread(forLoaderResult: Result<BTCPrice, RemoteBTCPriceLoaderError>) async {
+    private func expecttoDispatchOnMainThread(forLoaderResult: Result<
+        BTCPrice,
+        BTCPriceLoaderError
+    >) async {
         let (sut, btcDisplayableSpy, _) = makeSUT(
             btcloadableStub: forLoaderResult
         )
@@ -140,12 +143,12 @@ enum BTCDisplayable: Equatable {
 }
 
 class BTCPriceLoadableStub: BTCPriceLoadable {
-    var stub: Result<BTCPrice, RemoteBTCPriceLoaderError>
-    init(stub: Result<BTCPrice, RemoteBTCPriceLoaderError>) {
+    var stub: Result<BTCPrice, BTCPriceLoaderError>
+    init(stub: Result<BTCPrice, BTCPriceLoaderError>) {
         self.stub = stub
     }
 
-    func loadBTCPrice() async throws(RemoteBTCPriceLoaderError) -> BTCPrice {
+    func loadBTCPrice() async throws(BTCPriceLoaderError) -> BTCPrice {
         try stub.get()
     }
 }

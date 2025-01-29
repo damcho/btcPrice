@@ -5,27 +5,27 @@
 //  Created by Damian Modernell on 24/1/25.
 //
 
-struct RemoteBTCPriceLoaderWithFallbackDecorator {
-    let primaryLoader: BTCPriceLoadable
-    let secodaryLoader: BTCPriceLoadable
+public struct RemoteBTCPriceLoaderWithFallbackDecorator {
+    let primaryLoader: RemoteBTCPriceLoadable
+    let secodaryLoader: RemoteBTCPriceLoadable
 
     init(
-        primaryLoader: BTCPriceLoadable,
-        secondaryLoader: BTCPriceLoadable
+        primaryLoader: RemoteBTCPriceLoadable,
+        secondaryLoader: RemoteBTCPriceLoadable
     ) {
         self.primaryLoader = primaryLoader
         self.secodaryLoader = secondaryLoader
     }
 }
 
-// MARK: BTCPriceLoadable
+// MARK: RemoteBTCPriceLoadable
 
-extension RemoteBTCPriceLoaderWithFallbackDecorator: BTCPriceLoadable {
-    func loadBTCPrice() async throws(RemoteBTCPriceLoaderError) -> BTCPrice {
+extension RemoteBTCPriceLoaderWithFallbackDecorator: RemoteBTCPriceLoadable {
+    public func loadRemoteBTCPrice() async throws(RemoteBTCPriceLoaderError) -> RemoteBTCPrice {
         do {
-            return try await primaryLoader.loadBTCPrice()
+            return try await primaryLoader.loadRemoteBTCPrice()
         } catch {
-            return try await secodaryLoader.loadBTCPrice()
+            return try await secodaryLoader.loadRemoteBTCPrice()
         }
     }
 }

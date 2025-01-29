@@ -16,7 +16,7 @@ final class BTCLoaderAcceptanceTests: XCTestCase {
             secondaryLoaderHTTPResult: .failure(.timeout)
         )
         
-        let result = try await sut.loadBTCPrice()
+        let result = try await sut.loadRemoteBTCPrice()
         
         XCTAssertEqual(result, anyBTCPrice.decoded)
     }
@@ -27,7 +27,7 @@ final class BTCLoaderAcceptanceTests: XCTestCase {
             secondaryLoaderHTTPResult: .success((validHTTPResponse, anyBTCPrice.encoded))
         )
         
-        let result = try await sut.loadBTCPrice()
+        let result = try await sut.loadRemoteBTCPrice()
         
         XCTAssertEqual(result, anyBTCPrice.decoded)
     }
@@ -39,7 +39,7 @@ final class BTCLoaderAcceptanceTests: XCTestCase {
         )
         
         await AsyncXCTAssertThrowsError(
-            _ = try await sut.loadBTCPrice()
+            _ = try await sut.loadRemoteBTCPrice()
         ) { error in
             XCTAssertEqual(error as? RemoteBTCPriceLoaderError, .connectivity)
         }
@@ -50,7 +50,7 @@ extension BTCLoaderAcceptanceTests {
     private func makeSUT(
         primaryLoaderHTTPResult: Result<((HTTPURLResponse, Data)), HTTPClientError>,
         secondaryLoaderHTTPResult: Result<((HTTPURLResponse, Data)), HTTPClientError>
-    ) -> BTCPriceLoadable {
+    ) -> RemoteBTCPriceLoadable {
         RemoteBTCPriceLoaderWithFallbackDecorator(
             primaryLoader: RemoteBTCPriceLoader(
                 httpClient: HTTPClientStub(
@@ -69,9 +69,9 @@ extension BTCLoaderAcceptanceTests {
         )
     }
     
-    var anyBTCPrice: (decoded: BTCPrice, encoded: Data) {
+    var anyBTCPrice: (decoded: RemoteBTCPrice, encoded: Data) {
         (
-            BTCPrice(amount: 104593.190, currency: .USD),
+            RemoteBTCPrice(amount: 104593.190, currency: .USD),
             #"{"symbol":"BTCUSDT","price":"104593.19000000"}"#.data(using: .utf8)!
         )
     }

@@ -15,7 +15,7 @@ final class BTCLoaderTests: XCTestCase {
         )
 
         await AsyncXCTAssertThrowsError(
-            try await sut.loadBTCPrice()
+            try await sut.loadRemoteBTCPrice()
         ){ error in
             XCTAssertEqual(error as? RemoteBTCPriceLoaderError, RemoteBTCPriceLoaderError.decoding)
         }
@@ -26,7 +26,7 @@ final class BTCLoaderTests: XCTestCase {
             httpResult: .failure(anyHTTPError)
         )
         await AsyncXCTAssertThrowsError(
-            try await sut.loadBTCPrice()
+            try await sut.loadRemoteBTCPrice()
         ) { error in
             XCTAssertEqual(error as? RemoteBTCPriceLoaderError, RemoteBTCPriceLoaderError.connectivity)
         }
@@ -40,7 +40,7 @@ final class BTCLoaderTests: XCTestCase {
             ).success(httpResponse:data:)
         )
         
-        let actualBTCPrice = try await sut.loadBTCPrice()
+        let actualBTCPrice = try await sut.loadRemoteBTCPrice()
         
         XCTAssertEqual(actualBTCPrice, expectedBTCPrice)
     }
@@ -48,7 +48,7 @@ final class BTCLoaderTests: XCTestCase {
 
 extension BTCLoaderTests {
     func makeSUT(
-        for mapper: @escaping (HTTPURLResponse, Data) throws -> BTCPrice = {_, _ in anyBTCPrice},
+        for mapper: @escaping (HTTPURLResponse, Data) throws -> RemoteBTCPrice = {_, _ in anyBTCPrice},
         httpResult: Result<(HTTPURLResponse, Data), HTTPClientError> = .success((anyHTTPResponse, anyData))
     ) -> RemoteBTCPriceLoader {
         RemoteBTCPriceLoader(
@@ -59,8 +59,8 @@ extension BTCLoaderTests {
     }
 }
 
-var anyBTCPrice: BTCPrice {
-    BTCPrice(amount: 10.0, currency: .USD)
+var anyBTCPrice: RemoteBTCPrice {
+    RemoteBTCPrice(amount: 10.0, currency: .USD)
 }
 
 var anyData: Data {
@@ -85,8 +85,8 @@ var anyHTTPResponse: HTTPURLResponse {
 }
 
 struct BTCMapperStub {
-    let result: Result<BTCPrice, RemoteBTCPriceLoaderError>
-    func success(httpResponse: HTTPURLResponse, data: Data) throws(RemoteBTCPriceLoaderError) -> BTCPrice {
+    let result: Result<RemoteBTCPrice, RemoteBTCPriceLoaderError>
+    func success(httpResponse: HTTPURLResponse, data: Data) throws(RemoteBTCPriceLoaderError) -> RemoteBTCPrice {
         try result.get()
     }
 }

@@ -1,12 +1,16 @@
 //
-//  BTCPriceLoaderUtility.swift
+//  RemoteBTCPriceLoaderUtility.swift
 //  BTCLoader
 //
 //  Created by Damian Modernell on 24/1/25.
 //
 
-public enum BTCPriceLoaderUtility {
-    static func binanceLoader(with httpClient: HTTPClient) -> BTCPriceLoadable {
+public enum RemoteBTCPriceLoaderUtility {
+    static func binanceLoader(
+        with httpClient: HTTPClient
+    )
+        -> RemoteBTCPriceLoadable
+    {
         RemoteBTCPriceLoader(
             httpClient: httpClient,
             url: BTCSource.binance.url,
@@ -14,7 +18,11 @@ public enum BTCPriceLoaderUtility {
         )
     }
 
-    static func coinbaseLoader(with httpClient: HTTPClient) -> BTCPriceLoadable {
+    static func coinbaseLoader(
+        with httpClient: HTTPClient
+    )
+        -> RemoteBTCPriceLoadable
+    {
         RemoteBTCPriceLoader(
             httpClient: httpClient,
             url: BTCSource.coinbase.url,
@@ -22,7 +30,11 @@ public enum BTCPriceLoaderUtility {
         )
     }
 
-    public static func makeLoader(with httpClient: HTTPClient) -> BTCPriceLoadable {
+    public static func makeLoader(
+        with httpClient: HTTPClient
+    )
+        -> RemoteBTCPriceLoaderWithFallbackDecorator
+    {
         RemoteBTCPriceLoaderWithFallbackDecorator(
             primaryLoader: binanceLoader(
                 with: httpClient

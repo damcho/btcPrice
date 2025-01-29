@@ -5,12 +5,7 @@
 //  Created by Damian Modernell on 23/1/25.
 //
 
-typealias Mapper = ((HTTPURLResponse, Data)) throws -> BTCPrice
-
-public enum RemoteBTCPriceLoaderError: Error {
-    case decoding
-    case connectivity
-}
+typealias Mapper = ((HTTPURLResponse, Data)) throws -> RemoteBTCPrice
 
 struct RemoteBTCPriceLoader {
     let httpClient: HTTPClient
@@ -18,10 +13,10 @@ struct RemoteBTCPriceLoader {
     let map: Mapper
 }
 
-// MARK: BTCPriceLoadable
+// MARK: RemoteBTCPriceLoadable
 
-extension RemoteBTCPriceLoader: BTCPriceLoadable {
-    func loadBTCPrice() async throws(RemoteBTCPriceLoaderError) -> BTCPrice {
+extension RemoteBTCPriceLoader: RemoteBTCPriceLoadable {
+    func loadRemoteBTCPrice() async throws(RemoteBTCPriceLoaderError) -> RemoteBTCPrice {
         do {
             return try await map(httpClient.load(url: url))
         } catch is HTTPClientError {

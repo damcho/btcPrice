@@ -5,7 +5,7 @@
 //  Created by Damian Modernell on 28/1/25.
 //
 
-import BTCLoader
+import BTCUtilityCore
 import Foundation
 import SwiftUI
 

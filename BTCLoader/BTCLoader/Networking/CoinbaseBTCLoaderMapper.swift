@@ -13,7 +13,7 @@ enum CoinbaseBTCLoaderMapper {
             case display = "DISPLAY"
         }
 
-        func toBTCPrice() throws -> BTCPrice {
+        func toBTCPrice() throws -> RemoteBTCPrice {
             let trimmedDisplay = display.price.replacingOccurrences(of: " ", with: "")
             let formatter = NumberFormatter()
             formatter.locale = Locale(identifier: "en_US")
@@ -21,7 +21,7 @@ enum CoinbaseBTCLoaderMapper {
             guard let aPrice = formatter.number(from: trimmedDisplay) else {
                 throw RemoteBTCPriceLoaderError.decoding
             }
-            return BTCPrice(amount: Double(truncating: aPrice), currency: .USD)
+            return RemoteBTCPrice(amount: Double(truncating: aPrice), currency: .USD)
         }
     }
 
@@ -33,7 +33,7 @@ enum CoinbaseBTCLoaderMapper {
         }
     }
 
-    static func map(http: (response: HTTPURLResponse, data: Data)) throws -> BTCPrice {
+    static func map(http: (response: HTTPURLResponse, data: Data)) throws -> RemoteBTCPrice {
         guard http.response.statusCode == 200 else {
             throw RemoteBTCPriceLoaderError.connectivity
         }

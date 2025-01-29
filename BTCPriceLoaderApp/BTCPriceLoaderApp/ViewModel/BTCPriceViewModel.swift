@@ -4,7 +4,6 @@
 //
 //  Created by Damian Modernell on 26/1/25.
 //
-import BTCLoader
 import BTCUtilityCore
 import Foundation
 

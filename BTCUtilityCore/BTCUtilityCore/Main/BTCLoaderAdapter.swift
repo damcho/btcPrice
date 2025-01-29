@@ -8,18 +8,6 @@
 import BTCLoader
 import Foundation
 
-public protocol BTCPriceErrorDisplayable {
-    func displayBTCLoadError(for timestamp: Date?)
-}
-
-public protocol BTCPriceErrorRemovable {
-    func hideBTCLoadError()
-}
-
-public protocol BTCPriceDisplayable {
-    func display(_ btcPrice: BTCPrice)
-}
-
 final class BTCLoaderAdapter {
     let loader: BTCPriceLoadable
     let btcPriceDisplayable: BTCPriceDisplayable
