@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:BTCUtilityCore/BTCUtilityCore.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:BTCPriceCLI/BTCPriceCLI.xcodeproj">
    </FileRef>
    <FileRef
