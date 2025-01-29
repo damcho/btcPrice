@@ -14,9 +14,9 @@
   "testTargets" : [
     {
       "target" : {
-        "containerPath" : "container:..\/Networking\/Networking.xcodeproj",
-        "identifier" : "8B6B83A22D490F3D00E88E4E",
-        "name" : "NetworkingTests"
+        "containerPath" : "container:..\/BTCUtilityCore\/BTCUtilityCore.xcodeproj",
+        "identifier" : "8B4251692D49AF8400E10B6E",
+        "name" : "BTCUtilityCoreTests"
       }
     },
     {
@@ -32,6 +32,13 @@
         "containerPath" : "container:..\/BTCLoader\/BTCLoader.xcodeproj",
         "identifier" : "8B13EB412D42C4C700CEAE21",
         "name" : "BTCLoaderTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:..\/Networking\/Networking.xcodeproj",
+        "identifier" : "8B6B83A22D490F3D00E88E4E",
+        "name" : "NetworkingTests"
       }
     }
   ],
