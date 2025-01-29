@@ -24,11 +24,14 @@ public enum BTCCoreComposer {
         )
     )
 
+    @discardableResult
     public static func compose(
         for btcDisplayable: BTCPriceDisplayable,
         errorDisplayable: BTCPriceErrorDisplayable,
         errorRemovable: BTCPriceErrorRemovable? = nil
-    ) {
+    )
+        -> BTCPriceScheduler
+    {
         let btcPriceScheduler = BTCPriceScheduler(
             repeatTimeInterval: BTCCoreComposer.scheduledBTCLoadInterval
         )
@@ -44,5 +47,6 @@ public enum BTCCoreComposer {
         btcPriceScheduler.schedule {
             _ = btcLoaderAdapter.load()
         }
+        return btcPriceScheduler
     }
 }

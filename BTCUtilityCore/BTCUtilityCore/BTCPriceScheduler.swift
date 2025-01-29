@@ -9,7 +9,7 @@ import Foundation
 
 typealias BTCPriceSchedulerInvocationClosure = () -> Void
 
-final class BTCPriceScheduler {
+public final class BTCPriceScheduler {
     let repeatTimeInterval: TimeInterval
     private(set) var timer: Timer?
 
