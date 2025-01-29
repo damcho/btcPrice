@@ -5,6 +5,7 @@
 //  Created by Damian Modernell on 25/1/25.
 //
 
+import BTCUtilityCore
 import SwiftUI
 
 struct BTCPriceErrorView: View {
@@ -24,7 +25,7 @@ struct BTCPriceErrorView: View {
 
 #Preview {
     let viewModel = BTCPriceErrorViewModel(
-        dateFormatter: BTCAppComposer.errorViewModelDateFormatter
+        dateFormatter: BTCCoreComposer.errorDateFormatter
     )
     viewModel.displayBTCLoadError(for: nil)
     return BTCPriceErrorView(
@@ -34,7 +35,7 @@ struct BTCPriceErrorView: View {
 
 #Preview {
     let viewModel = BTCPriceErrorViewModel(
-        dateFormatter: BTCAppComposer.errorViewModelDateFormatter
+        dateFormatter: BTCCoreComposer.errorDateFormatter
     )
     viewModel.displayBTCLoadError(for: .now)
     return BTCPriceErrorView(

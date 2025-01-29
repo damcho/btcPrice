@@ -9,15 +9,9 @@ import BTCUtilityCore
 import Foundation
 
 enum BTCAppComposer {
-    static var errorViewModelDateFormatter: DateFormatter {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy/MM/dd HH:mm"
-        return formatter
-    }
-
     static func compose() -> BTCUtilityView {
         let btcErrorViewModel = BTCPriceErrorViewModel(
-            dateFormatter: errorViewModelDateFormatter
+            dateFormatter: BTCCoreComposer.errorDateFormatter
         )
         let btcPriceViewModel = BTCPriceViewModel()
 

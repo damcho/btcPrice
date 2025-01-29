@@ -12,7 +12,7 @@ import Networking
 public enum BTCCoreComposer {
     static let scheduledBTCLoadInterval = 1.0
 
-    static var errorViewModelDateFormatter: DateFormatter {
+    public static var errorDateFormatter: DateFormatter {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy/MM/dd HH:mm"
         return formatter
