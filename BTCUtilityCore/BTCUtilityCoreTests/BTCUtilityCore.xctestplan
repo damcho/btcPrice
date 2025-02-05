@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "13356139-7524-472F-8E5B-C0550AA760D2",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : false
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:BTCUtilityCore.xcodeproj",
+        "identifier" : "8B4251692D49AF8400E10B6E",
+        "name" : "BTCUtilityCoreTests"
+      }
+    }
+  ],
+  "version" : 1
+}
