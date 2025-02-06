@@ -10,8 +10,26 @@ import XCTest
 
 struct BybitBTCLoaderMapper {
     struct BybitBTCPrice: Decodable {
+        let result: ResultList
         
+        func toBTCPrice() throws -> RemoteBTCPrice {
+            guard let firstIndexPrice = result.list.first?.indexPrice,
+            let aDoublePrice = Double(firstIndexPrice) else {
+                throw RemoteBTCPriceLoaderError.decoding
+            }
+            
+            return RemoteBTCPrice(amount: aDoublePrice, currency: .USD)
+        }
     }
+    
+    struct ResultList: Decodable {
+        let list: [BTCPriceInfo]
+    }
+    
+    struct BTCPriceInfo: Decodable {
+        let indexPrice: String
+    }
+    
     static func map(http: (response: HTTPURLResponse, data: Data)) throws -> RemoteBTCPrice {
         guard http.response.statusCode == 200 else {
             throw RemoteBTCPriceLoaderError.connectivity
@@ -20,7 +38,7 @@ struct BybitBTCLoaderMapper {
             BybitBTCPrice.self,
             from: http.data
         )
-        return .init(amount: 10, currency: .USD)
+        return try bybitBTCPrice.toBTCPrice()
     }
 }
 
@@ -40,6 +58,16 @@ final class BybitBTCLoaderMapperTests: XCTestCase, BTCMapperSpecs {
                 http: (validHTTPResponse, emptyData)
             )
         )
+    }
+    
+    func test_maps_btc_price_successfully() throws {
+        let expectedBTCPrice = anyBybitBTCPrice
+        
+        let decodedBTCprice = try BybitBTCLoaderMapper.map(
+            http: (validHTTPResponse, expectedBTCPrice.encoded)
+        )
+        
+        XCTAssertEqual(decodedBTCprice, expectedBTCPrice.decoded)
     }
     
     func test_throws_on_decoding_error() throws {

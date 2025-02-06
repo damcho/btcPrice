@@ -24,7 +24,7 @@ var anyCoinbaseBTCPrice: (decoded: RemoteBTCPrice, encoded: Data) {
 
 var anyBybitBTCPrice: (decoded: RemoteBTCPrice, encoded: Data) {
     (
-        RemoteBTCPrice(amount: 103457.51, currency: .USD),
+        RemoteBTCPrice(amount: 96081.38, currency: .USD),
         #"{"result": {"list": [{"symbol": "BTCUSDT","indexPrice": "96081.38"}]}}"#.data(using: .utf8)!
     )
 }
