@@ -19,9 +19,7 @@ public enum BTCCoreComposer {
     }
 
     static let urlSessionHttpClient = URLSessionHTTPClient(
-        session: URLSession(
-            configuration: URLSessionHTTPClient.oneSecondTimeoutConfiguration
-        )
+        session: .shared
     )
 
     @discardableResult
@@ -45,7 +43,11 @@ public enum BTCCoreComposer {
 
         btcPriceScheduler.schedule {
             Task {
-                try await btcLoaderAdapter.load()
+                await BTCLoadErrorDispatcherAdapter(
+                    errorDispatcher: errorDisplayable,
+                    loadHandler: btcLoaderAdapter.load,
+                    timeout: 1.0
+                ).load()
             }
         }
         return btcPriceScheduler

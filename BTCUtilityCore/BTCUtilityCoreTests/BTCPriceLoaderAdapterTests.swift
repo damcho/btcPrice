@@ -46,10 +46,6 @@ final class BTCPriceLoaderAdapterTests: XCTestCase {
         )
     }
 
-    func test_network_timeout() {
-        XCTAssertEqual(URLSessionHTTPClient.oneSecondTimeoutConfiguration.timeoutIntervalForResource, 1)
-    }
-
     func test_throws_on_btc_price_load_failure() async throws {
         let (sut, _, _) = makeSUT(
             btcloadableStub: .failure(.connectivity)

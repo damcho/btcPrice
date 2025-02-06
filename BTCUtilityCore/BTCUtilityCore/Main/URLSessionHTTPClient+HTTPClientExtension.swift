@@ -22,10 +22,4 @@ extension URLSessionHTTPClient: @retroactive HTTPClient {
             throw .timeout
         }
     }
-
-    static var oneSecondTimeoutConfiguration: URLSessionConfiguration {
-        let urlSessionConfig = URLSessionConfiguration.default
-        urlSessionConfig.timeoutIntervalForResource = 1.0
-        return urlSessionConfig
-    }
 }
