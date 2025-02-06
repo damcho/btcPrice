@@ -62,10 +62,3 @@ extension RemoteBTCPriceLoaderWithFallbackDecoratorTests {
         )
     }
 }
-
-struct BTCPriceLoadableStub: RemoteBTCPriceLoadable {
-    let stubResult: Result<RemoteBTCPrice, RemoteBTCPriceLoaderError>
-    func loadRemoteBTCPrice() async throws(RemoteBTCPriceLoaderError) -> RemoteBTCPrice {
-        try stubResult.get()
-    }
-}

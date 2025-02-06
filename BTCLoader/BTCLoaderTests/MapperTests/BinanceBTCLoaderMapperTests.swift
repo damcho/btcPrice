@@ -52,21 +52,3 @@ final class BinanceBTCLoaderMapperTests: XCTestCase, BTCMapperSpecs {
         )
     }
 }
-
-var non200HTTPResponse: HTTPURLResponse {
-    HTTPURLResponse(
-        url: anyURL,
-        statusCode: 404,
-        httpVersion: nil,
-        headerFields: nil
-    )!
-}
-
-var validHTTPResponse: HTTPURLResponse {
-    HTTPURLResponse(
-        url: anyURL,
-        statusCode: 200,
-        httpVersion: nil,
-        headerFields: nil
-    )!
-}

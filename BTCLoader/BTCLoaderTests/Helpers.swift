@@ -35,3 +35,37 @@ var anyInvalidEncodedBTCPrice: (decoded: RemoteBTCPrice, encoded: Data) {
         "invalid-btc-price".data(using: .utf8)!
     )
 }
+
+var non200HTTPResponse: HTTPURLResponse {
+    HTTPURLResponse(
+        url: anyURL,
+        statusCode: 404,
+        httpVersion: nil,
+        headerFields: nil
+    )!
+}
+
+var validHTTPResponse: HTTPURLResponse {
+    HTTPURLResponse(
+        url: anyURL,
+        statusCode: 200,
+        httpVersion: nil,
+        headerFields: nil
+    )!
+}
+
+var anyBTCPrice: RemoteBTCPrice {
+    RemoteBTCPrice(amount: 10.0, currency: .USD)
+}
+
+var anyData: Data {
+    Data()
+}
+
+var anyHTTPError: HTTPClientError {
+    .timeout
+}
+
+var anyURL: URL {
+    URL(string: "https://example.com")!
+}

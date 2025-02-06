@@ -49,7 +49,7 @@ final class BTCLoaderTests: XCTestCase {
 extension BTCLoaderTests {
     func makeSUT(
         for mapper: @escaping (HTTPURLResponse, Data) throws -> RemoteBTCPrice = {_, _ in anyBTCPrice},
-        httpResult: Result<(HTTPURLResponse, Data), HTTPClientError> = .success((anyHTTPResponse, anyData))
+        httpResult: Result<(HTTPURLResponse, Data), HTTPClientError> = .success((validHTTPResponse, anyData))
     ) -> RemoteBTCPriceLoader {
         RemoteBTCPriceLoader(
             httpClient: HTTPClientStub(result: httpResult),
@@ -59,41 +59,3 @@ extension BTCLoaderTests {
     }
 }
 
-var anyBTCPrice: RemoteBTCPrice {
-    RemoteBTCPrice(amount: 10.0, currency: .USD)
-}
-
-var anyData: Data {
-    Data()
-}
-
-var anyHTTPError: HTTPClientError {
-    .timeout
-}
-
-var anyURL: URL {
-    URL(string: "https://example.com")!
-}
-
-var anyHTTPResponse: HTTPURLResponse {
-    HTTPURLResponse(
-        url: anyURL,
-        statusCode: 200,
-        httpVersion: nil,
-        headerFields: nil
-    )!
-}
-
-struct BTCMapperStub {
-    let result: Result<RemoteBTCPrice, RemoteBTCPriceLoaderError>
-    func success(httpResponse: HTTPURLResponse, data: Data) throws(RemoteBTCPriceLoaderError) -> RemoteBTCPrice {
-        try result.get()
-    }
-}
-
-struct HTTPClientStub: HTTPClient {
-    let result: Result<(HTTPURLResponse, Data), HTTPClientError>
-    func load(url: URL) async throws(HTTPClientError) -> (HTTPURLResponse, Data) {
-        try result.get()
-    }
-}
