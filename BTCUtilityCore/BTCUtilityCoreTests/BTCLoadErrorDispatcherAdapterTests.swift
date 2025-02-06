@@ -111,7 +111,7 @@ extension BTCLoadErrorDispatcherAdapterTests {
     }
 
     func forLongerThan(_ timeout: TimeInterval) async {
-        sleep(UInt32(timeout + 0.1))
+        sleep(UInt32(timeout + 1))
     }
     
     func completeImmediately() {
