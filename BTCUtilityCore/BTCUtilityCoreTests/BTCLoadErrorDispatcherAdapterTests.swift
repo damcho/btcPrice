@@ -47,6 +47,7 @@ final class BTCLoadErrorDispatcherAdapter {
 
         do {
             try await loader().value
+            lastUpdatedBTCDate = .now
         } catch {
             dispatchError()
         }
@@ -90,6 +91,22 @@ final class BTCLoadErrorDispatcherAdapterTests: XCTestCase {
         await sut.load()
 
         XCTAssertEqual(errorDispatcherSpy.dispatchedLoadErrorMessages, [.noTimestamp])
+    }
+
+    func test_stores_last_updated_date_on_btc_loaded_successfully() async {
+        let (sut, _) = makeSUT(
+            loader: {
+                Task {
+                    sleep(0)
+                }
+            }
+        )
+
+        XCTAssertNil(sut.lastUpdatedBTCDate)
+
+        await sut.load()
+
+        XCTAssertNotNil(sut.lastUpdatedBTCDate)
     }
 }
 
