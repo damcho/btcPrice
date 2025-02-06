@@ -8,7 +8,14 @@
 import XCTest
 @testable import BTCLoader
 
-final class BinanceBTCLoaderMapperTests: XCTestCase {
+protocol BTCMapperSpecs {
+    func test_throws_on_non_200_http_response() throws
+    func test_throws_on_200_response_and_empty_data() throws
+    func test_maps_btc_price_successfully() throws
+    func test_throws_on_decoding_error() throws
+}
+
+final class BinanceBTCLoaderMapperTests: XCTestCase, BTCMapperSpecs {
     
     func test_throws_on_non_200_http_response() throws {
         XCTAssertThrowsError(
@@ -28,7 +35,7 @@ final class BinanceBTCLoaderMapperTests: XCTestCase {
     }
     
     func test_maps_btc_price_successfully() throws {
-        let expectedBTCPrice = anyBTCPrice
+        let expectedBTCPrice = anyBinanceBTCPrice
         
         let decodedBTCprice = try BinanceBTCLoaderMapper.map(
             http: (validHTTPResponse, expectedBTCPrice.encoded)
@@ -36,13 +43,12 @@ final class BinanceBTCLoaderMapperTests: XCTestCase {
         
         XCTAssertEqual(decodedBTCprice, expectedBTCPrice.decoded)
     }
-}
-
-private extension BinanceBTCLoaderMapperTests {
-    var anyBTCPrice: (decoded: RemoteBTCPrice, encoded: Data) {
-        (
-            RemoteBTCPrice(amount: 104593.190, currency: .USD),
-            #"{"symbol":"BTCUSDT","price":"104593.19000000"}"#.data(using: .utf8)!
+    
+    func test_throws_on_decoding_error() throws {
+        XCTAssertThrowsError(
+            try BinanceBTCLoaderMapper.map(
+                http: (validHTTPResponse, anyInvalidEncodedBTCPrice.encoded)
+            )
         )
     }
 }

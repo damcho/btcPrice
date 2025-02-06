@@ -8,8 +8,7 @@
 import XCTest
 @testable import BTCLoader
 
-final class CoinbaseBTCLoaderMapperTests: XCTestCase {
-
+final class CoinbaseBTCLoaderMapperTests: XCTestCase, BTCMapperSpecs {
     func test_throws_on_non_200_http_response() throws {
         XCTAssertThrowsError(
             try CoinbaseBTCLoaderMapper.map(http: (non200HTTPResponse, anyData))
@@ -31,6 +30,14 @@ final class CoinbaseBTCLoaderMapperTests: XCTestCase {
         )
         
         XCTAssertEqual(decodedBTCprice, expectedBTCPrice.decoded)
+    }
+    
+    func test_throws_on_decoding_error() throws {
+        XCTAssertThrowsError(
+            try CoinbaseBTCLoaderMapper.map(
+                http: (validHTTPResponse, anyInvalidEncodedBTCPrice.encoded)
+            )
+        )
     }
 }
 
