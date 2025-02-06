@@ -9,10 +9,17 @@ import XCTest
 @testable import BTCLoader
 
 struct BybitBTCLoaderMapper {
+    struct BybitBTCPrice: Decodable {
+        
+    }
     static func map(http: (response: HTTPURLResponse, data: Data)) throws -> RemoteBTCPrice {
         guard http.response.statusCode == 200 else {
             throw RemoteBTCPriceLoaderError.connectivity
         }
+        let bybitBTCPrice = try JSONDecoder().decode(
+            BybitBTCPrice.self,
+            from: http.data
+        )
         return .init(amount: 10, currency: .USD)
     }
 }
@@ -27,12 +34,12 @@ final class BybitBTCLoaderMapperTests: XCTestCase, BTCMapperSpecs {
     }
     
     func test_throws_on_200_response_and_empty_data() throws {
-
-    }
-    
-    func test_maps_btc_price_successfully() throws {
-
-        
+        let emptyData = Data()
+        XCTAssertThrowsError(
+            try BybitBTCLoaderMapper.map(
+                http: (validHTTPResponse, emptyData)
+            )
+        )
     }
     
     func test_throws_on_decoding_error() throws {
