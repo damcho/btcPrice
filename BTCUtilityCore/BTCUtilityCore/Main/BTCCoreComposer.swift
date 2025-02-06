@@ -44,7 +44,9 @@ public enum BTCCoreComposer {
         )
 
         btcPriceScheduler.schedule {
-            _ = btcLoaderAdapter.load()
+            Task {
+                try await btcLoaderAdapter.load()
+            }
         }
         return btcPriceScheduler
     }

@@ -16,7 +16,7 @@ final class BTCPriceLoaderAdapterTests: XCTestCase {
             btcloadableStub: .success(anyBTCPrice)
         )
 
-        try await sut.load().value
+        try await sut.load()
 
         XCTAssertEqual(
             btcPriceDisplayableSpy.displayableMessages,
@@ -30,7 +30,7 @@ final class BTCPriceLoaderAdapterTests: XCTestCase {
         )
         XCTAssertEqual(btcPriceDisplayableSpy.displayableMessages, [])
 
-        try await sut.load().value
+        try await sut.load()
 
         XCTAssertEqual(
             btcPriceDisplayableSpy.displayableMessages,
@@ -56,7 +56,7 @@ final class BTCPriceLoaderAdapterTests: XCTestCase {
         )
 
         await AsyncXCTAssertThrowsError(
-            try await sut.load().value
+            try await sut.load()
         )
     }
 }
@@ -89,8 +89,7 @@ extension BTCPriceLoaderAdapterTests {
             btcloadableStub: forLoaderResult
         )
 
-        let task = sut.load()
-        try await task.value
+        try await sut.load()
 
         XCTAssertTrue(btcDisplayableSpy.isMainThread, file: file, line: line)
     }

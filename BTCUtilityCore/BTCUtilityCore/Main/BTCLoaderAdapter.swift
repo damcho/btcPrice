@@ -25,14 +25,12 @@ final class BTCLoaderAdapter {
         self.btcPriceErrorRemovable = btcPriceErrorRemovable
     }
 
-    func load() -> Task<Void, Error> {
-        Task {
-            let newBTCPrice = try await loader.loadBTCPrice()
-            lastBTCUpdatedTimestamp = .now
-            await MainActor.run {
-                btcPriceErrorRemovable?.hideBTCLoadError()
-                btcPriceDisplayable.display(newBTCPrice)
-            }
+    func load() async throws {
+        let newBTCPrice = try await loader.loadBTCPrice()
+        lastBTCUpdatedTimestamp = .now
+        await MainActor.run {
+            btcPriceErrorRemovable?.hideBTCLoadError()
+            btcPriceDisplayable.display(newBTCPrice)
         }
     }
 }
