@@ -69,12 +69,10 @@ extension BTCLoaderAcceptanceTests {
         secondaryLoader: RemoteBTCPriceLoadable = BTCPriceLoadableStub(stubResult: .failure(.connectivity)),
         thirdLoader: RemoteBTCPriceLoadable = BTCPriceLoadableStub(stubResult: .failure(.connectivity))
     ) -> RemoteBTCPriceLoadable {
-        RemoteBTCPriceLoaderWithFallbackDecorator(
-            primaryLoader: RemoteBTCPriceLoaderWithFallbackDecorator(
-                primaryLoader: primaryLoader,
-                secondaryLoader: secondaryLoader
-            ),
-            secondaryLoader: thirdLoader
+        RemoteBTCPriceLoaderUtility.compose(
+            primaryLoader: primaryLoader,
+            secondaryLoader: secondaryLoader,
+            thirdLoader: thirdLoader
         )
     }
 }

@@ -42,18 +42,31 @@ public enum RemoteBTCPriceLoaderUtility {
         )
     }
 
+    static func compose(
+        primaryLoader: RemoteBTCPriceLoadable,
+        secondaryLoader: RemoteBTCPriceLoadable,
+        thirdLoader: RemoteBTCPriceLoadable
+    )
+        -> RemoteBTCPriceLoaderWithFallbackDecorator
+    {
+        RemoteBTCPriceLoaderWithFallbackDecorator(
+            primaryLoader: RemoteBTCPriceLoaderWithFallbackDecorator(
+                primaryLoader: primaryLoader,
+                secondaryLoader: secondaryLoader
+            ),
+            secondaryLoader: thirdLoader
+        )
+    }
+
     public static func makeLoader(
         with httpClient: HTTPClient
     )
         -> RemoteBTCPriceLoaderWithFallbackDecorator
     {
-        RemoteBTCPriceLoaderWithFallbackDecorator(
-            primaryLoader: binanceLoader(
-                with: httpClient
-            ),
-            secondaryLoader: coinbaseLoader(
-                with: httpClient
-            )
+        compose(
+            primaryLoader: binanceLoader(with: httpClient),
+            secondaryLoader: coinbaseLoader(with: httpClient),
+            thirdLoader: bybitLoader(with: httpClient)
         )
     }
 }
