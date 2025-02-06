@@ -55,7 +55,9 @@ final class BTCLoadErrorDispatcherAdapter {
             try await loader().value
             lastUpdatedBTCDate = .now
         } catch {
-            dispatchError()
+            await MainActor.run {
+                dispatchError()
+            }
         }
 
         invalidateErrorDisplayTimer()
@@ -135,6 +137,20 @@ final class BTCLoadErrorDispatcherAdapterTests: XCTestCase {
 
         XCTAssertEqual(errorDispatcherSpy.dispatchedLoadErrorMessages, [])
     }
+
+    func test_dispatches_error_in_mainThread() async throws {
+        let (sut, errorDispatcherSpy) = makeSUT(
+            loader: {
+                Task {
+                    throw anyNSError()
+                }
+            }
+        )
+
+        await sut.load()
+
+        XCTAssertTrue(errorDispatcherSpy.isMainTheread)
+    }
 }
 
 extension BTCLoadErrorDispatcherAdapterTests {
@@ -162,12 +178,14 @@ extension BTCLoadErrorDispatcherAdapterTests {
 
 final class BTCErrorDisplayableSpy: BTCPriceErrorDisplayable {
     var dispatchedLoadErrorMessages: [ErrorDisplayType] = []
+    var isMainTheread: Bool = false
     enum ErrorDisplayType {
         case noTimestamp
         case timeStamp
     }
 
     func displayBTCLoadError(for timestamp: Date?) {
+        isMainTheread = Thread.isMainThread
         guard timestamp != nil else {
             dispatchedLoadErrorMessages.append(.noTimestamp)
             return
