@@ -18,7 +18,7 @@ var anyBinanceBTCPrice: (decoded: RemoteBTCPrice, encoded: Data) {
 var anyCoinbaseBTCPrice: (decoded: RemoteBTCPrice, encoded: Data) {
     (
         RemoteBTCPrice(amount: 103457.51, currency: .USD),
-        #"{"RAW":{"PRICE":103457.51 }}"#.data(using: .utf8)!
+        #"{"DISPLAY": {"PRICE": "$ 103,457.51"}}"#.data(using: .utf8)!
     )
 }
 

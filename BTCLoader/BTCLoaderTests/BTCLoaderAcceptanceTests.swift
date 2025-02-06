@@ -10,33 +10,36 @@ import XCTest
 
 final class BTCLoaderAcceptanceTests: XCTestCase {
 
-    func test_returns_btc_price_on_succesful_primary_loader_source() async throws {
+    func test_returns_btc_price_on_succesful_binance_primary_loader_source() async throws {
         let sut = makeSUT(
-            primaryLoaderHTTPResult: .success((validHTTPResponse, anyBTCPrice.encoded)),
-            secondaryLoaderHTTPResult: .failure(.timeout)
+            primaryLoader: RemoteBTCPriceLoaderUtility.binanceLoader(
+                with: HTTPClientStub(
+                    result: .success((validHTTPResponse, anyBinanceBTCPrice.encoded))
+                )
+            )
         )
         
         let result = try await sut.loadRemoteBTCPrice()
         
-        XCTAssertEqual(result, anyBTCPrice.decoded)
+        XCTAssertEqual(result, anyBinanceBTCPrice.decoded)
     }
     
-    func test_returns_btc_price_on_succesful_secondary_loader_source() async throws {
+    func test_returns_btc_price_on_succesful_coinbase_secondary_loader_source() async throws {
         let sut = makeSUT(
-            primaryLoaderHTTPResult: .failure(.timeout),
-            secondaryLoaderHTTPResult: .success((validHTTPResponse, anyBTCPrice.encoded))
+            secondaryLoader: RemoteBTCPriceLoaderUtility.coinbaseLoader(
+                with: HTTPClientStub(
+                    result: .success((validHTTPResponse, anyCoinbaseBTCPrice.encoded))
+                )
+            )
         )
         
         let result = try await sut.loadRemoteBTCPrice()
         
-        XCTAssertEqual(result, anyBTCPrice.decoded)
+        XCTAssertEqual(result, anyCoinbaseBTCPrice.decoded)
     }
     
     func test_throws_on_all_loaders_failure() async throws {
-        let sut = makeSUT(
-            primaryLoaderHTTPResult: .failure(.timeout),
-            secondaryLoaderHTTPResult: .failure(.timeout)
-        )
+        let sut = makeSUT()
         
         await AsyncXCTAssertThrowsError(
             _ = try await sut.loadRemoteBTCPrice()
@@ -44,35 +47,34 @@ final class BTCLoaderAcceptanceTests: XCTestCase {
             XCTAssertEqual(error as? RemoteBTCPriceLoaderError, .connectivity)
         }
     }
+    
+    func test_returns_btc_price_on_succesful_bybit_loader_source() async throws {
+        let sut = makeSUT(
+            thirdLoader: RemoteBTCPriceLoaderUtility.bybitLoader(
+                with: HTTPClientStub(
+                    result: .success((validHTTPResponse, anyBybitBTCPrice.encoded))
+                )
+            )
+        )
+        
+        let result = try await sut.loadRemoteBTCPrice()
+        
+        XCTAssertEqual(result, anyBybitBTCPrice.decoded)
+    }
 }
 
 extension BTCLoaderAcceptanceTests {
     private func makeSUT(
-        primaryLoaderHTTPResult: Result<((HTTPURLResponse, Data)), HTTPClientError>,
-        secondaryLoaderHTTPResult: Result<((HTTPURLResponse, Data)), HTTPClientError>
+        primaryLoader: RemoteBTCPriceLoadable = BTCPriceLoadableStub(stubResult: .failure(.connectivity)),
+        secondaryLoader: RemoteBTCPriceLoadable = BTCPriceLoadableStub(stubResult: .failure(.connectivity)),
+        thirdLoader: RemoteBTCPriceLoadable = BTCPriceLoadableStub(stubResult: .failure(.connectivity))
     ) -> RemoteBTCPriceLoadable {
         RemoteBTCPriceLoaderWithFallbackDecorator(
-            primaryLoader: RemoteBTCPriceLoader(
-                httpClient: HTTPClientStub(
-                    result: primaryLoaderHTTPResult
-                ),
-                url: anyURL,
-                map: BinanceBTCLoaderMapper.map
+            primaryLoader: RemoteBTCPriceLoaderWithFallbackDecorator(
+                primaryLoader: primaryLoader,
+                secondaryLoader: secondaryLoader
             ),
-            secondaryLoader: RemoteBTCPriceLoader(
-                httpClient: HTTPClientStub(
-                    result: secondaryLoaderHTTPResult
-                ),
-                url: anyURL,
-                map: BinanceBTCLoaderMapper.map
-            )
-        )
-    }
-    
-    var anyBTCPrice: (decoded: RemoteBTCPrice, encoded: Data) {
-        (
-            RemoteBTCPrice(amount: 104593.190, currency: .USD),
-            #"{"symbol":"BTCUSDT","price":"104593.19000000"}"#.data(using: .utf8)!
+            secondaryLoader: thirdLoader
         )
     }
 }
