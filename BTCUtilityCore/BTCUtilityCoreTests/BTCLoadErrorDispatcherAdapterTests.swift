@@ -12,20 +12,43 @@ final class BTCLoadErrorDispatcherAdapter {
     let errorDispatcher: BTCPriceErrorDisplayable
     var lastUpdatedBTCDate: Date?
     let loader: () -> Task<Void, Error>
+    var timer: Timer?
+    let timeout: TimeInterval
 
     init(
         errorDispatcher: BTCPriceErrorDisplayable,
-        loadHandler: @escaping () -> Task<Void, Error>
+        loadHandler: @escaping () -> Task<Void, Error>,
+        timeout: TimeInterval
     ) {
         self.errorDispatcher = errorDispatcher
         self.loader = loadHandler
+        self.timeout = timeout
+    }
+
+    func fireErrorDisplayTimerInMainThread() {
+        Task { @MainActor in
+            timer?.invalidate()
+            timer = Timer.scheduledTimer(
+                withTimeInterval: timeout,
+                repeats: false,
+                block: { _ in
+                    self.dispatchError()
+                }
+            )
+        }
+    }
+
+    private func dispatchError() {
+        errorDispatcher.displayBTCLoadError(for: lastUpdatedBTCDate)
     }
 
     func load() async {
+        fireErrorDisplayTimerInMainThread()
+
         do {
             try await loader().value
         } catch {
-            errorDispatcher.displayBTCLoadError(for: lastUpdatedBTCDate)
+            dispatchError()
         }
     }
 }
@@ -54,6 +77,20 @@ final class BTCLoadErrorDispatcherAdapterTests: XCTestCase {
 
         XCTAssertEqual(errorDispatcherSpy.dispatchedLoadErrorMessages, [])
     }
+
+    func test_dispatches_error_on_loading_tiemout() async {
+        let (sut, errorDispatcherSpy) = makeSUT(
+            loader: {
+                Task {
+                    sleep(2)
+                }
+            }
+        )
+
+        await sut.load()
+
+        XCTAssertEqual(errorDispatcherSpy.dispatchedLoadErrorMessages, [.noTimestamp])
+    }
 }
 
 extension BTCLoadErrorDispatcherAdapterTests {
@@ -66,7 +103,8 @@ extension BTCLoadErrorDispatcherAdapterTests {
         return (
             BTCLoadErrorDispatcherAdapter(
                 errorDispatcher: errorDispatcherSpy,
-                loadHandler: loader
+                loadHandler: loader,
+                timeout: 1
             ),
             errorDispatcherSpy
         )
