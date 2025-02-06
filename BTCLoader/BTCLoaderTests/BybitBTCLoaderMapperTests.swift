@@ -71,6 +71,10 @@ final class BybitBTCLoaderMapperTests: XCTestCase, BTCMapperSpecs {
     }
     
     func test_throws_on_decoding_error() throws {
-        
+        XCTAssertThrowsError(
+            try BinanceBTCLoaderMapper.map(
+                http: (validHTTPResponse, anyInvalidEncodedBTCPrice.encoded)
+            )
+        )
     }
 }
