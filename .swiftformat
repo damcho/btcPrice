@@ -15,6 +15,7 @@
   --commas inline
   --maxwidth 120
   --closingparen balanced
+  --asynccapturing false
 
   # file options
   --swiftversion 6.0
@@ -28,3 +29,4 @@
   
   # Excluded files
   --exclude BTCLoader/BTCLoaderTests
+  --exclude BTCUtilityCore/BTCUtilityCoreTests
