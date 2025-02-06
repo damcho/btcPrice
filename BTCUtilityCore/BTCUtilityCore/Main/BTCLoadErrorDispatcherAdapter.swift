@@ -10,13 +10,13 @@ import Foundation
 final class BTCLoadErrorDispatcherAdapter {
     let errorDispatcher: BTCPriceErrorDisplayable
     var lastUpdatedBTCDate: Date?
-    let loader: () -> Task<Void, Error>
+    let loader: () async throws -> Void
     var timer: Timer?
     let timeout: TimeInterval
 
     init(
         errorDispatcher: BTCPriceErrorDisplayable,
-        loadHandler: @escaping () -> Task<Void, Error>,
+        loadHandler: @escaping () async throws -> Void,
         timeout: TimeInterval
     ) {
         self.errorDispatcher = errorDispatcher
@@ -51,7 +51,7 @@ final class BTCLoadErrorDispatcherAdapter {
         fireErrorDisplayTimerInMainThread()
 
         do {
-            try await loader().value
+            try await loader()
             lastUpdatedBTCDate = .now
         } catch {
             await MainActor.run {

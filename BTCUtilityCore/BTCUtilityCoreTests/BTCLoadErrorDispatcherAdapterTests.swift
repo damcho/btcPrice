@@ -12,7 +12,7 @@ final class BTCLoadErrorDispatcherAdapterTests: XCTestCase {
     func test_displays_error_with_no_timestamp_on_load_error() async {
         let (sut, errorDispatcherSpy) = makeSUT(
             loader: {
-                Task { throw anyNSError() }
+                throw anyNSError()
             }
         )
 
@@ -24,7 +24,7 @@ final class BTCLoadErrorDispatcherAdapterTests: XCTestCase {
     func test_does_not_dispatch_error_on_btc_loading_completed_immediately() async {
         let (sut, errorDispatcherSpy) = makeSUT(
             loader: {
-                Task {}
+                self.completeImmediately()
             }
         )
 
@@ -34,12 +34,13 @@ final class BTCLoadErrorDispatcherAdapterTests: XCTestCase {
     }
 
     func test_dispatches_error_on_loading_tiemout() async {
+        let errorDispatchTimeout: TimeInterval = 1
+
         let (sut, errorDispatcherSpy) = makeSUT(
             loader: {
-                Task {
-                    sleep(2)
-                }
-            }
+                await self.forLongerThan(errorDispatchTimeout)
+            },
+            timeout: errorDispatchTimeout
         )
 
         await sut.load()
@@ -50,9 +51,7 @@ final class BTCLoadErrorDispatcherAdapterTests: XCTestCase {
     func test_stores_last_updated_date_on_btc_loaded_successfully() async {
         let (sut, _) = makeSUT(
             loader: {
-                Task {
-                    sleep(0)
-                }
+                self.completeImmediately()
             }
         )
 
@@ -68,9 +67,7 @@ final class BTCLoadErrorDispatcherAdapterTests: XCTestCase {
 
         let (sut, errorDispatcherSpy) = makeSUT(
             loader: {
-                Task {
-                    sleep(0)
-                }
+                self.completeImmediately()
             },
             timeout: errorDispatchTimeout
         )
@@ -85,9 +82,7 @@ final class BTCLoadErrorDispatcherAdapterTests: XCTestCase {
     func test_dispatches_error_in_mainThread() async throws {
         let (sut, errorDispatcherSpy) = makeSUT(
             loader: {
-                Task {
-                    throw anyNSError()
-                }
+                throw anyNSError()
             }
         )
 
@@ -99,7 +94,7 @@ final class BTCLoadErrorDispatcherAdapterTests: XCTestCase {
 
 extension BTCLoadErrorDispatcherAdapterTests {
     func makeSUT(
-        loader: @escaping () -> Task<Void, Error>,
+        loader: @escaping () async throws -> Void,
         timeout: TimeInterval = 1
     )
         -> (BTCLoadErrorDispatcherAdapter, BTCErrorDisplayableSpy)
@@ -117,6 +112,10 @@ extension BTCLoadErrorDispatcherAdapterTests {
 
     func forLongerThan(_ timeout: TimeInterval) async {
         sleep(UInt32(timeout + 0.1))
+    }
+    
+    func completeImmediately() {
+        return
     }
 }
 
