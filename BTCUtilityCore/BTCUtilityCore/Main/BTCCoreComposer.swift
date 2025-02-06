@@ -40,7 +40,6 @@ public enum BTCCoreComposer {
                 with: urlSessionHttpClient
             ),
             btcPriceDisplayable: btcDisplayable,
-            btcPriceErrorDisplayable: errorDisplayable,
             btcPriceErrorRemovable: errorRemovable
         )
 

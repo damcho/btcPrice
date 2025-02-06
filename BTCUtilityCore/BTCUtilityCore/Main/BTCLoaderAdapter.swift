@@ -12,37 +12,26 @@ final class BTCLoaderAdapter {
     let loader: BTCPriceLoadable
     let btcPriceDisplayable: BTCPriceDisplayable
     let btcPriceErrorRemovable: BTCPriceErrorRemovable?
-    let btcPriceErrorDisplayable: BTCPriceErrorDisplayable
 
     private var lastBTCUpdatedTimestamp: Date?
 
     init(
         loader: BTCPriceLoadable,
         btcPriceDisplayable: BTCPriceDisplayable,
-        btcPriceErrorDisplayable: BTCPriceErrorDisplayable,
         btcPriceErrorRemovable: BTCPriceErrorRemovable? = nil
     ) {
         self.loader = loader
         self.btcPriceDisplayable = btcPriceDisplayable
         self.btcPriceErrorRemovable = btcPriceErrorRemovable
-        self.btcPriceErrorDisplayable = btcPriceErrorDisplayable
     }
 
-    func load() -> Task<Void, Never> {
+    func load() -> Task<Void, Error> {
         Task {
-            do {
-                let newBTCPrice = try await loader.loadBTCPrice()
-                lastBTCUpdatedTimestamp = .now
-                await MainActor.run {
-                    btcPriceErrorRemovable?.hideBTCLoadError()
-                    btcPriceDisplayable.display(newBTCPrice)
-                }
-            } catch {
-                await MainActor.run {
-                    btcPriceErrorDisplayable.displayBTCLoadError(
-                        for: lastBTCUpdatedTimestamp
-                    )
-                }
+            let newBTCPrice = try await loader.loadBTCPrice()
+            lastBTCUpdatedTimestamp = .now
+            await MainActor.run {
+                btcPriceErrorRemovable?.hideBTCLoadError()
+                btcPriceDisplayable.display(newBTCPrice)
             }
         }
     }

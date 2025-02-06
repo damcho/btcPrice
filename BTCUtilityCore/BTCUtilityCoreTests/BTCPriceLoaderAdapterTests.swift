@@ -1,5 +1,5 @@
 //
-//  BTCPriceLoaderAcceptanceTests.swift
+//  BTCPriceLoaderAdapterTests.swift
 //  BTCPriceLoaderAppTests
 //
 //  Created by Damian Modernell on 26/1/25.
@@ -10,22 +10,13 @@ import BTCLoader
 import Networking
 import XCTest
 
-final class BTCPriceLoaderAcceptanceTests: XCTestCase {
-    func test_displays_error_with_no_timestamp_on_load_error() async {
-        let (sut, btcPriceDisplayableSpy, _) = makeSUT(
-            btcloadableStub: .failure(.connectivity)
-        )
-
-        await sut.load().value
-        XCTAssertEqual(btcPriceDisplayableSpy.displayableMessages, [.error(nil)])
-    }
-
-    func test_displays_btc_price_on_successful_load() async {
+final class BTCPriceLoaderAdapterTests: XCTestCase {
+    func test_displays_btc_price_on_successful_load() async throws {
         let (sut, btcPriceDisplayableSpy, _) = makeSUT(
             btcloadableStub: .success(anyBTCPrice)
         )
 
-        await sut.load().value
+        try await sut.load().value
 
         XCTAssertEqual(
             btcPriceDisplayableSpy.displayableMessages,
@@ -33,13 +24,13 @@ final class BTCPriceLoaderAcceptanceTests: XCTestCase {
         )
     }
 
-    func test_hides_error_on_successful_btc_price_load() async {
+    func test_hides_error_on_successful_btc_price_load() async throws {
         let (sut, btcPriceDisplayableSpy, _) = makeSUT(
             btcloadableStub: .success(anyBTCPrice)
         )
         XCTAssertEqual(btcPriceDisplayableSpy.displayableMessages, [])
 
-        await sut.load().value
+        try await sut.load().value
 
         XCTAssertEqual(
             btcPriceDisplayableSpy.displayableMessages,
@@ -47,28 +38,8 @@ final class BTCPriceLoaderAcceptanceTests: XCTestCase {
         )
     }
 
-    func test_hides_error_after_showing_error_and_successful_btc_price_load() async {
-        let (sut, btcDisplayableSpy, btcLoadableStub) = makeSUT(
-            btcloadableStub: .failure(.connectivity)
-        )
-        await sut.load().value
-        btcLoadableStub.stub = .success(anyBTCPrice)
-
-        await sut.load().value
-
-        XCTAssertEqual(
-            btcDisplayableSpy.displayableMessages,
-            [.error(nil), .hideError, .success(anyBTCPrice)]
-        )
-    }
-
-    func test_dispatches_on_main_thread_on_btc_price_load() async {
-        await expecttoDispatchOnMainThread(
-            forLoaderResult: .failure(
-                .connectivity
-            )
-        )
-        await expecttoDispatchOnMainThread(
+    func test_dispatches_on_main_thread_on_btc_price_load() async throws {
+        try await expecttoDispatchOnMainThread(
             forLoaderResult: .success(
                 anyBTCPrice
             )
@@ -78,9 +49,19 @@ final class BTCPriceLoaderAcceptanceTests: XCTestCase {
     func test_network_timeout() {
         XCTAssertEqual(URLSessionHTTPClient.oneSecondTimeoutConfiguration.timeoutIntervalForResource, 1)
     }
+
+    func test_throws_on_btc_price_load_failure() async throws {
+        let (sut, _, _) = makeSUT(
+            btcloadableStub: .failure(.connectivity)
+        )
+
+        await AsyncXCTAssertThrowsError(
+            try await sut.load().value
+        )
+    }
 }
 
-extension BTCPriceLoaderAcceptanceTests {
+extension BTCPriceLoaderAdapterTests {
     private func makeSUT(
         btcloadableStub: Result<BTCPrice, BTCPriceLoaderError>
     )
@@ -94,28 +75,28 @@ extension BTCPriceLoaderAcceptanceTests {
         let loaderAdapter = BTCLoaderAdapter(
             loader: btcLoadableStub,
             btcPriceDisplayable: btcDisplayableSpy,
-            btcPriceErrorDisplayable: btcDisplayableSpy,
             btcPriceErrorRemovable: btcDisplayableSpy
         )
         return (loaderAdapter, btcDisplayableSpy, btcLoadableStub)
     }
 
-    private func expecttoDispatchOnMainThread(forLoaderResult: Result<
-        BTCPrice,
-        BTCPriceLoaderError
-    >) async {
+    private func expecttoDispatchOnMainThread(
+        forLoaderResult: Result<BTCPrice, BTCPriceLoaderError>,
+        file: StaticString = #file,
+        line: UInt = #line
+    ) async throws {
         let (sut, btcDisplayableSpy, _) = makeSUT(
             btcloadableStub: forLoaderResult
         )
 
         let task = sut.load()
-        await task.value
+        try await task.value
 
-        XCTAssertTrue(btcDisplayableSpy.isMainThread)
+        XCTAssertTrue(btcDisplayableSpy.isMainThread, file: file, line: line)
     }
 }
 
-class BTCPriceDisplayableSpy: BTCPriceDisplayable, BTCPriceErrorDisplayable, BTCPriceErrorRemovable {
+class BTCPriceDisplayableSpy: BTCPriceDisplayable, BTCPriceErrorRemovable {
     var displayableMessages: [BTCDisplayable] = []
     var isMainThread = false
     var didDisplayError = false
@@ -123,11 +104,6 @@ class BTCPriceDisplayableSpy: BTCPriceDisplayable, BTCPriceErrorDisplayable, BTC
     func display(_ price: BTCPrice) {
         isMainThread = Thread.isMainThread
         displayableMessages.append(.success(price))
-    }
-
-    func displayBTCLoadError(for timestamp: Date?) {
-        isMainThread = Thread.isMainThread
-        displayableMessages.append(.error(timestamp))
     }
 
     func hideBTCLoadError() {
@@ -155,4 +131,21 @@ class BTCPriceLoadableStub: BTCPriceLoadable {
 
 var anyBTCPrice: BTCPrice {
     BTCPrice(amount: 10, currency: .USD)
+}
+
+extension XCTest {
+    func AsyncXCTAssertThrowsError(
+        _ expression: @autoclosure () async throws -> some Sendable,
+        _ message: @autoclosure () -> String = "This call should throw an error.",
+        file: StaticString = #filePath,
+        line: UInt = #line,
+        _ errorHandler: (_ error: Error) -> Void = { _ in }
+    ) async {
+        do {
+            _ = try await expression()
+            XCTFail(message(), file: file, line: line)
+        } catch {
+            errorHandler(error)
+        }
+    }
 }
