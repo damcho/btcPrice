@@ -38,6 +38,12 @@ final class BTCLoadErrorDispatcherAdapter {
         }
     }
 
+    private func invalidateErrorDisplayTimer() {
+        Task { @MainActor in
+            timer?.invalidate()
+        }
+    }
+
     private func dispatchError() {
         errorDispatcher.displayBTCLoadError(for: lastUpdatedBTCDate)
     }
@@ -51,6 +57,8 @@ final class BTCLoadErrorDispatcherAdapter {
         } catch {
             dispatchError()
         }
+
+        invalidateErrorDisplayTimer()
     }
 }
 
@@ -108,11 +116,31 @@ final class BTCLoadErrorDispatcherAdapterTests: XCTestCase {
 
         XCTAssertNotNil(sut.lastUpdatedBTCDate)
     }
+
+    func test_does_not_fire_dispatch_error_timer_on_loader_completion() async {
+        let errorDispatchTimeout: TimeInterval = 0.1
+
+        let (sut, errorDispatcherSpy) = makeSUT(
+            loader: {
+                Task {
+                    sleep(0)
+                }
+            },
+            timeout: errorDispatchTimeout
+        )
+
+        await sut.load()
+
+        await forLongerThan(errorDispatchTimeout)
+
+        XCTAssertEqual(errorDispatcherSpy.dispatchedLoadErrorMessages, [])
+    }
 }
 
 extension BTCLoadErrorDispatcherAdapterTests {
     func makeSUT(
-        loader: @escaping () -> Task<Void, Error>
+        loader: @escaping () -> Task<Void, Error>,
+        timeout: TimeInterval = 1
     )
         -> (BTCLoadErrorDispatcherAdapter, BTCErrorDisplayableSpy)
     {
@@ -121,10 +149,14 @@ extension BTCLoadErrorDispatcherAdapterTests {
             BTCLoadErrorDispatcherAdapter(
                 errorDispatcher: errorDispatcherSpy,
                 loadHandler: loader,
-                timeout: 1
+                timeout: timeout
             ),
             errorDispatcherSpy
         )
+    }
+
+    func forLongerThan(_ timeout: TimeInterval) async {
+        sleep(UInt32(timeout + 0.1))
     }
 }
 
