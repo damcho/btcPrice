@@ -8,6 +8,7 @@
 enum BTCSource {
     case binance
     case coinbase
+    case bybit
 
     var url: URL {
         switch self {
@@ -17,6 +18,10 @@ enum BTCSource {
         case .coinbase: URL(
                 string: "https://min-api.cryptocompare.com/data/generateAvg?fsym=BTC&tsym=USD&e=coinbase"
             )!
+        case .bybit:
+            URL(
+                string: "https://api-testnet.bybit.com/v5/market/tickers?category=inverse&symbol=BTCUSDT"
+            )!
         }
     }
 
@@ -24,6 +29,7 @@ enum BTCSource {
         switch self {
         case .binance: BinanceBTCLoaderMapper.map
         case .coinbase: CoinbaseBTCLoaderMapper.map
+        case .bybit: BybitBTCLoaderMapper.map
         }
     }
 }

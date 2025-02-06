@@ -30,6 +30,18 @@ public enum RemoteBTCPriceLoaderUtility {
         )
     }
 
+    static func bybitLoader(
+        with httpClient: HTTPClient
+    )
+        -> RemoteBTCPriceLoadable
+    {
+        RemoteBTCPriceLoader(
+            httpClient: httpClient,
+            url: BTCSource.bybit.url,
+            map: BTCSource.bybit.mapper
+        )
+    }
+
     public static func makeLoader(
         with httpClient: HTTPClient
     )
