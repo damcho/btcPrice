@@ -12,6 +12,7 @@
 		8B4251862D49B08B00E10B6E /* BTCLoader.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8B4251842D49B08B00E10B6E /* BTCLoader.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		8B4251892D49B08E00E10B6E /* Networking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B4251882D49B08E00E10B6E /* Networking.framework */; };
 		8B42518A2D49B08E00E10B6E /* Networking.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8B4251882D49B08E00E10B6E /* Networking.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		8BB3B0842D5644F5000F235B /* libTestHelpers.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BB3B0832D5644F5000F235B /* libTestHelpers.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +45,7 @@
 		8B42516A2D49AF8400E10B6E /* BTCUtilityCoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BTCUtilityCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B4251842D49B08B00E10B6E /* BTCLoader.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = BTCLoader.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B4251882D49B08E00E10B6E /* Networking.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Networking.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8BB3B0832D5644F5000F235B /* libTestHelpers.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libTestHelpers.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -87,6 +89,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8B42516B2D49AF8400E10B6E /* BTCUtilityCore.framework in Frameworks */,
+				8BB3B0842D5644F5000F235B /* libTestHelpers.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -115,6 +118,7 @@
 		8B4251832D49B08B00E10B6E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8BB3B0832D5644F5000F235B /* libTestHelpers.a */,
 				8B4251882D49B08E00E10B6E /* Networking.framework */,
 				8B4251842D49B08B00E10B6E /* BTCLoader.framework */,
 			);

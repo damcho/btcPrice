@@ -9,6 +9,7 @@ import BTCLoader
 @testable import BTCUtilityCore
 import Networking
 import XCTest
+import TestHelpers
 
 final class BTCPriceLoaderAdapterTests: XCTestCase {
     func test_displays_btc_price_on_successful_load() async throws {
@@ -126,21 +127,4 @@ class BTCPriceLoadableStub: BTCPriceLoadable {
 
 var anyBTCPrice: BTCPrice {
     BTCPrice(amount: 10, currency: .USD)
-}
-
-extension XCTest {
-    func AsyncXCTAssertThrowsError(
-        _ expression: @autoclosure () async throws -> some Sendable,
-        _ message: @autoclosure () -> String = "This call should throw an error.",
-        file: StaticString = #filePath,
-        line: UInt = #line,
-        _ errorHandler: (_ error: Error) -> Void = { _ in }
-    ) async {
-        do {
-            _ = try await expression()
-            XCTFail(message(), file: file, line: line)
-        } catch {
-            errorHandler(error)
-        }
-    }
 }
