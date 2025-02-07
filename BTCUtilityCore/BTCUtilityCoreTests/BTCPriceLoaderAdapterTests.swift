@@ -7,13 +7,12 @@
 
 import BTCLoader
 @testable import BTCUtilityCore
-import Networking
 import XCTest
 import TestHelpers
 
 final class BTCPriceLoaderAdapterTests: XCTestCase {
     func test_displays_btc_price_on_successful_load() async throws {
-        let (sut, btcPriceDisplayableSpy, _) = makeSUT(
+        let (sut, btcPriceDisplayableSpy, _) = await makeSUT(
             btcloadableStub: .success(anyBTCPrice)
         )
 
@@ -26,7 +25,7 @@ final class BTCPriceLoaderAdapterTests: XCTestCase {
     }
 
     func test_hides_error_on_successful_btc_price_load() async throws {
-        let (sut, btcPriceDisplayableSpy, _) = makeSUT(
+        let (sut, btcPriceDisplayableSpy, _) = await makeSUT(
             btcloadableStub: .success(anyBTCPrice)
         )
         XCTAssertEqual(btcPriceDisplayableSpy.displayableMessages, [])
@@ -48,7 +47,7 @@ final class BTCPriceLoaderAdapterTests: XCTestCase {
     }
 
     func test_throws_on_btc_price_load_failure() async throws {
-        let (sut, _, _) = makeSUT(
+        let (sut, _, _) = await makeSUT(
             btcloadableStub: .failure(.connectivity)
         )
 
@@ -59,7 +58,7 @@ final class BTCPriceLoaderAdapterTests: XCTestCase {
 }
 
 extension BTCPriceLoaderAdapterTests {
-    private func makeSUT(
+    @MainActor private func makeSUT(
         btcloadableStub: Result<BTCPrice, BTCPriceLoaderError>
     )
         -> (BTCLoaderAdapter, BTCPriceDisplayableSpy, BTCPriceLoadableStub)
@@ -74,6 +73,10 @@ extension BTCPriceLoaderAdapterTests {
             btcPriceDisplayable: btcDisplayableSpy,
             btcPriceErrorRemovable: btcDisplayableSpy
         )
+        trackForMemoryLeaks(loaderAdapter)
+        trackForMemoryLeaks(btcLoadableStub)
+        trackForMemoryLeaks(btcDisplayableSpy)
+
         return (loaderAdapter, btcDisplayableSpy, btcLoadableStub)
     }
 
@@ -82,7 +85,7 @@ extension BTCPriceLoaderAdapterTests {
         file: StaticString = #file,
         line: UInt = #line
     ) async throws {
-        let (sut, btcDisplayableSpy, _) = makeSUT(
+        let (sut, btcDisplayableSpy, _) = await makeSUT(
             btcloadableStub: forLoaderResult
         )
 
