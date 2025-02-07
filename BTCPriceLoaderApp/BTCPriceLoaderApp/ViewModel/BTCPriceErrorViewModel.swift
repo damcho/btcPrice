@@ -8,6 +8,20 @@
 import BTCUtilityCore
 import Foundation
 
+enum BTCPriceErrorFormat {
+    case noTimesamp
+    case timestamp(String)
+
+    var value: String {
+        switch self {
+        case .noTimesamp:
+            "Failed to load BTC price"
+        case let .timestamp(date):
+            "Failed to update value. Displaying last updated value from \(date)"
+        }
+    }
+}
+
 class BTCPriceErrorViewModel: ObservableObject {
     @Published private(set) var errorLabel: String = ""
     private let dateformatter: DateFormatter
@@ -18,10 +32,12 @@ class BTCPriceErrorViewModel: ObservableObject {
 
     func displayBTCLoadError(for timestamp: Date? = nil) {
         if let atimestamp = timestamp {
-            errorLabel =
-                "Failed to update value. Displaying last updated value from \(dateformatter.string(from: atimestamp))"
+            errorLabel = BTCPriceErrorFormat.timestamp(
+                dateformatter.string(from: atimestamp)
+            ).value
+
         } else {
-            errorLabel = "Failed to load BTC price"
+            errorLabel = BTCPriceErrorFormat.noTimesamp.value
         }
     }
 

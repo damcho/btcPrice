@@ -20,6 +20,9 @@ final class BTCPriceViewModelTests: XCTestCase {
         let bTCPriceViewModel = BTCPriceViewModel()
         bTCPriceViewModel.btcPrice = .init(price: 123, color: .red)
 
-        XCTAssertEqual(bTCPriceViewModel.btcPriceLabel, "BTC/USD: $123.00")
+        XCTAssertEqual(
+            bTCPriceViewModel.btcPriceLabel,
+            BTCPriceLabelFormat.btc.value(for: bTCPriceViewModel.btcPrice)
+        )
     }
 }

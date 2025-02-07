@@ -7,11 +7,19 @@
 import BTCUtilityCore
 import Foundation
 
+enum BTCPriceLabelFormat {
+    case btc
+
+    func value(for price: BTCPriceViewRepresentation) -> String {
+        "BTC/\(price.currency.code): \(price.stringPriceRepresentation)"
+    }
+}
+
 final class BTCPriceViewModel: ObservableObject {
     @Published var btcPriceLabel: String = ""
     var btcPrice: BTCPriceViewRepresentation = .init(price: 0, color: .black) {
         didSet {
-            btcPriceLabel = "BTC/\(btcPrice.currency.code): \(btcPrice.stringPriceRepresentation)"
+            btcPriceLabel = BTCPriceLabelFormat.btc.value(for: btcPrice)
         }
     }
 }
