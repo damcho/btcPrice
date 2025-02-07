@@ -7,6 +7,7 @@
 
 import Foundation
 @testable import BTCLoader
+import TestHelpers
 
 var anyBinanceBTCPrice: (decoded: RemoteBTCPrice, encoded: Data) {
     (
@@ -58,14 +59,6 @@ var anyBTCPrice: RemoteBTCPrice {
     RemoteBTCPrice(amount: 10.0, currency: .USD)
 }
 
-var anyData: Data {
-    Data()
-}
-
 var anyHTTPError: HTTPClientError {
     .timeout
-}
-
-var anyURL: URL {
-    URL(string: "https://example.com")!
 }

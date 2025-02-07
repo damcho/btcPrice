@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		8B6B83A42D490F3D00E88E4E /* Networking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B6B839B2D490F3D00E88E4E /* Networking.framework */; };
+		8BB3B0802D5642C4000F235B /* libTestHelpers.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BB3B07F2D5642C4000F235B /* libTestHelpers.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -23,6 +24,7 @@
 /* Begin PBXFileReference section */
 		8B6B839B2D490F3D00E88E4E /* Networking.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Networking.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B6B83A32D490F3D00E88E4E /* NetworkingTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NetworkingTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		8BB3B07F2D5642C4000F235B /* libTestHelpers.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libTestHelpers.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -64,6 +66,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8B6B83A42D490F3D00E88E4E /* Networking.framework in Frameworks */,
+				8BB3B0802D5642C4000F235B /* libTestHelpers.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -75,6 +78,7 @@
 			children = (
 				8B6B839D2D490F3D00E88E4E /* Networking */,
 				8B6B83A72D490F3D00E88E4E /* NetworkingTests */,
+				8BB3B07E2D5642C4000F235B /* Frameworks */,
 				8B6B839C2D490F3D00E88E4E /* Products */,
 			);
 			sourceTree = "<group>";
@@ -86,6 +90,14 @@
 				8B6B83A32D490F3D00E88E4E /* NetworkingTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		8BB3B07E2D5642C4000F235B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				8BB3B07F2D5642C4000F235B /* libTestHelpers.a */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

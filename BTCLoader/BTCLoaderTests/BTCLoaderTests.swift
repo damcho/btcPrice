@@ -7,6 +7,7 @@
 
 @testable import BTCLoader
 import XCTest
+import TestHelpers
 
 final class BTCLoaderTests: XCTestCase {
     func test_throws_decoding_error_on_mapping_failure() async {

@@ -1,12 +1,13 @@
 //
 //  XCTest+XCTAssertExtension.swift
-//  BTCLoaderTests
+//  TestHelpers
 //
-//  Created by Damian Modernell on 23/1/25.
+//  Created by Damian Modernell on 7/2/25.
 //
+
 import XCTest
 
-extension XCTest {
+public extension XCTest {
     func AsyncXCTAssertThrowsError(
         _ expression: @autoclosure () async throws -> some Sendable,
         _ message: @autoclosure () -> String = "This call should throw an error.",

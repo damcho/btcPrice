@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:TestHelpers/TestHelpers.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:BTCUtilityCore/BTCUtilityCore.xcodeproj">
    </FileRef>
    <FileRef
@@ -37,5 +40,8 @@
    </FileRef>
    <FileRef
       location = "group:BTCUtilityCore/BTCUtilityCoreTests/BTCUtilityCore.xctestplan">
+   </FileRef>
+   <FileRef
+      location = "group:Networking/NetworkingTests/Networking.xctestplan">
    </FileRef>
 </Workspace>

@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "98269E4A-5E2C-4D08-B4EF-3BC96ECD8620",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : false
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:Networking.xcodeproj",
+        "identifier" : "8B6B83A22D490F3D00E88E4E",
+        "name" : "NetworkingTests"
+      }
+    }
+  ],
+  "version" : 1
+}

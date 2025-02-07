@@ -7,6 +7,7 @@
 
 import XCTest
 @testable import BTCLoader
+import TestHelpers
 
 final class BybitBTCLoaderMapperTests: XCTestCase, BTCMapperSpecs {
     func test_throws_on_non_200_http_response() throws {
