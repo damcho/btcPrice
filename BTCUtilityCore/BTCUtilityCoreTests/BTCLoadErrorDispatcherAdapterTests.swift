@@ -7,12 +7,13 @@
 
 @testable import BTCUtilityCore
 import XCTest
+import TestHelpers
 
 final class BTCLoadErrorDispatcherAdapterTests: XCTestCase {
     func test_displays_error_with_no_timestamp_on_load_error() async {
         let (sut, errorDispatcherSpy) = makeSUT(
             loader: {
-                throw anyNSError()
+                throw anyNSError
             }
         )
 
@@ -82,7 +83,7 @@ final class BTCLoadErrorDispatcherAdapterTests: XCTestCase {
     func test_dispatches_error_in_mainThread() async throws {
         let (sut, errorDispatcherSpy) = makeSUT(
             loader: {
-                throw anyNSError()
+                throw anyNSError
             }
         )
 
@@ -100,13 +101,15 @@ extension BTCLoadErrorDispatcherAdapterTests {
         -> (BTCLoadErrorDispatcherAdapter, BTCErrorDisplayableSpy)
     {
         let errorDispatcherSpy = BTCErrorDisplayableSpy()
+        let sut = BTCLoadErrorDispatcherAdapter(
+            errorDispatcher: errorDispatcherSpy,
+            loadHandler: loader,
+            timeout: timeout
+        )
+
         return (
-            BTCLoadErrorDispatcherAdapter(
-                errorDispatcher: errorDispatcherSpy,
-                loadHandler: loader,
-                timeout: timeout
-            ),
-            errorDispatcherSpy
+           sut,
+           errorDispatcherSpy
         )
     }
 
@@ -135,8 +138,4 @@ final class BTCErrorDisplayableSpy: BTCPriceErrorDisplayable {
         }
         dispatchedLoadErrorMessages.append(.timeStamp)
     }
-}
-
-func anyNSError() -> NSError {
-    NSError(domain: "any error", code: 0)
 }
