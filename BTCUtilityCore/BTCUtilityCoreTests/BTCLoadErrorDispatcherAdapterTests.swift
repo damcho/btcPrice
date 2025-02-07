@@ -11,7 +11,7 @@ import TestHelpers
 
 final class BTCLoadErrorDispatcherAdapterTests: XCTestCase {
     func test_displays_error_with_no_timestamp_on_load_error() async {
-        let (sut, errorDispatcherSpy) = makeSUT(
+        let (sut, errorDispatcherSpy) = await makeSUT(
             loader: {
                 throw anyNSError
             }
@@ -23,7 +23,7 @@ final class BTCLoadErrorDispatcherAdapterTests: XCTestCase {
     }
 
     func test_does_not_dispatch_error_on_btc_loading_completed_immediately() async {
-        let (sut, errorDispatcherSpy) = makeSUT(
+        let (sut, errorDispatcherSpy) = await makeSUT(
             loader: {
                 self.completeImmediately()
             }
@@ -37,7 +37,7 @@ final class BTCLoadErrorDispatcherAdapterTests: XCTestCase {
     func test_dispatches_error_on_loading_tiemout() async {
         let errorDispatchTimeout: TimeInterval = 1
 
-        let (sut, errorDispatcherSpy) = makeSUT(
+        let (sut, errorDispatcherSpy) = await makeSUT(
             loader: {
                 await self.forLongerThan(errorDispatchTimeout)
             },
@@ -50,7 +50,7 @@ final class BTCLoadErrorDispatcherAdapterTests: XCTestCase {
     }
 
     func test_stores_last_updated_date_on_btc_loaded_successfully() async {
-        let (sut, _) = makeSUT(
+        let (sut, _) = await makeSUT(
             loader: {
                 self.completeImmediately()
             }
@@ -66,7 +66,7 @@ final class BTCLoadErrorDispatcherAdapterTests: XCTestCase {
     func test_does_not_fire_dispatch_error_timer_on_loader_completion() async {
         let errorDispatchTimeout: TimeInterval = 0.1
 
-        let (sut, errorDispatcherSpy) = makeSUT(
+        let (sut, errorDispatcherSpy) = await makeSUT(
             loader: {
                 self.completeImmediately()
             },
@@ -81,7 +81,7 @@ final class BTCLoadErrorDispatcherAdapterTests: XCTestCase {
     }
 
     func test_dispatches_error_in_mainThread() async throws {
-        let (sut, errorDispatcherSpy) = makeSUT(
+        let (sut, errorDispatcherSpy) = await makeSUT(
             loader: {
                 throw anyNSError
             }
@@ -94,22 +94,32 @@ final class BTCLoadErrorDispatcherAdapterTests: XCTestCase {
 }
 
 extension BTCLoadErrorDispatcherAdapterTests {
-    func makeSUT(
+    @MainActor func makeSUT(
         loader: @escaping () async throws -> Void,
-        timeout: TimeInterval = 1
+        timeout: TimeInterval = 1,
+        file: StaticString = #filePath,
+        line: UInt = #line
     )
         -> (BTCLoadErrorDispatcherAdapter, BTCErrorDisplayableSpy)
     {
-        let errorDispatcherSpy = BTCErrorDisplayableSpy()
-        let sut = BTCLoadErrorDispatcherAdapter(
-            errorDispatcher: errorDispatcherSpy,
-            loadHandler: loader,
-            timeout: timeout
-        )
+        var sut: BTCLoadErrorDispatcherAdapter?
+        var errorDispatcherSpy: BTCErrorDisplayableSpy?
+        
+        autoreleasepool {
+            errorDispatcherSpy = BTCErrorDisplayableSpy()
+            sut = BTCLoadErrorDispatcherAdapter(
+                errorDispatcher: errorDispatcherSpy!,
+                loadHandler: loader,
+                timeout: timeout
+            )
+        }
+      
+        trackForMemoryLeaks(sut!, file: file, line: line)
+        trackForMemoryLeaks(errorDispatcherSpy!, file: file, line: line)
 
         return (
-           sut,
-           errorDispatcherSpy
+           sut!,
+           errorDispatcherSpy!
         )
     }
 
