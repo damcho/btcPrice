@@ -7,7 +7,7 @@
 
 import XCTest
 
-public extension XCTest {
+public extension XCTestCase {
     func AsyncXCTAssertThrowsError(
         _ expression: @autoclosure () async throws -> some Sendable,
         _ message: @autoclosure () -> String = "This call should throw an error.",
@@ -20,6 +20,18 @@ public extension XCTest {
             XCTFail(message(), file: file, line: line)
         } catch {
             errorHandler(error)
+        }
+    }
+    
+    @MainActor
+    func trackForMemoryLeaks(_ instance: AnyObject, file: StaticString = #filePath, line: UInt = #line) {
+        addTeardownBlock { [weak instance] in
+            XCTAssertNil(
+                instance,
+                "Instance should have been deallocated. Potential memory leak.",
+                file: file,
+                line: line
+            )
         }
     }
 }
