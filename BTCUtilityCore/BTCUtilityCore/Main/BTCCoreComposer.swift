@@ -40,14 +40,15 @@ public enum BTCCoreComposer {
             btcPriceDisplayable: btcDisplayable,
             btcPriceErrorRemovable: errorRemovable
         )
+        let btcPriceErrorDispatcher = BTCLoadErrorDispatcherAdapter(
+            errorDispatcher: errorDisplayable,
+            loadHandler: btcLoaderAdapter.load,
+            timeout: 1.0
+        )
 
         btcPriceScheduler.schedule {
             Task {
-                await BTCLoadErrorDispatcherAdapter(
-                    errorDispatcher: errorDisplayable,
-                    loadHandler: btcLoaderAdapter.load,
-                    timeout: 1.0
-                ).load()
+                await btcPriceErrorDispatcher.load()
             }
         }
         return btcPriceScheduler
