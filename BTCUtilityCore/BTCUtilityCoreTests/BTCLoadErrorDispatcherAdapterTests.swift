@@ -35,7 +35,7 @@ final class BTCLoadErrorDispatcherAdapterTests: XCTestCase {
     }
 
     func test_dispatches_error_on_loading_tiemout() async {
-        let errorDispatchTimeout: TimeInterval = 1
+        let errorDispatchTimeout = 1
 
         let (sut, errorDispatcherSpy) = await makeSUT(
             loader: {
@@ -63,8 +63,8 @@ final class BTCLoadErrorDispatcherAdapterTests: XCTestCase {
         XCTAssertNotNil(sut.lastUpdatedBTCDate)
     }
 
-    func test_does_not_fire_dispatch_error_timer_on_loader_completion() async {
-        let errorDispatchTimeout: TimeInterval = 0.1
+    func test_invalidates_timer_on_loader_completion_before_timeout() async {
+        let errorDispatchTimeout = 1
 
         let (sut, errorDispatcherSpy) = await makeSUT(
             loader: {
@@ -79,24 +79,12 @@ final class BTCLoadErrorDispatcherAdapterTests: XCTestCase {
 
         XCTAssertEqual(errorDispatcherSpy.dispatchedLoadErrorMessages, [])
     }
-
-    func test_dispatches_error_in_mainThread() async throws {
-        let (sut, errorDispatcherSpy) = await makeSUT(
-            loader: {
-                throw anyNSError
-            }
-        )
-
-        await sut.load()
-
-        XCTAssertTrue(errorDispatcherSpy.isMainTheread)
-    }
 }
 
 extension BTCLoadErrorDispatcherAdapterTests {
     @MainActor func makeSUT(
         loader: @escaping () async throws -> Void,
-        timeout: TimeInterval = 1,
+        timeout: Int = 1,
         file: StaticString = #filePath,
         line: UInt = #line
     )
@@ -110,7 +98,7 @@ extension BTCLoadErrorDispatcherAdapterTests {
             sut = BTCLoadErrorDispatcherAdapter(
                 errorDispatcher: errorDispatcherSpy!,
                 loadHandler: loader,
-                timeout: timeout
+                timeoutInSeconds: timeout
             )
         }
       
@@ -123,7 +111,7 @@ extension BTCLoadErrorDispatcherAdapterTests {
         )
     }
 
-    func forLongerThan(_ timeout: TimeInterval) async {
+    func forLongerThan(_ timeout: Int) async {
         sleep(UInt32(timeout + 1))
     }
     
@@ -134,14 +122,12 @@ extension BTCLoadErrorDispatcherAdapterTests {
 
 final class BTCErrorDisplayableSpy: BTCPriceErrorDisplayable {
     var dispatchedLoadErrorMessages: [ErrorDisplayType] = []
-    var isMainTheread: Bool = false
     enum ErrorDisplayType {
         case noTimestamp
         case timeStamp
     }
 
     func displayBTCLoadError(for timestamp: Date?) {
-        isMainTheread = Thread.isMainThread
         guard timestamp != nil else {
             dispatchedLoadErrorMessages.append(.noTimestamp)
             return

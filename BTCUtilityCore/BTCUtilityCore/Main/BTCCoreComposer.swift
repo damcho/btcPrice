@@ -11,6 +11,7 @@ import Networking
 
 public enum BTCCoreComposer {
     static let scheduledBTCLoadInterval = 1.0
+    static let errorDispatchTimeout = 1
 
     public static var errorDateFormatter: DateFormatter {
         let formatter = DateFormatter()
@@ -21,7 +22,7 @@ public enum BTCCoreComposer {
     static let urlSessionHttpClient = URLSessionHTTPClient(
         session: .shared
     )
-
+    
     @discardableResult
     public static func compose(
         for btcDisplayable: BTCPriceDisplayable,
@@ -43,7 +44,7 @@ public enum BTCCoreComposer {
         let btcPriceErrorDispatcher = BTCLoadErrorDispatcherAdapter(
             errorDispatcher: errorDisplayable,
             loadHandler: btcLoaderAdapter.load,
-            timeout: 1.0
+            timeoutInSeconds: errorDispatchTimeout
         )
 
         btcPriceScheduler.schedule {

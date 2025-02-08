@@ -11,36 +11,35 @@ final class BTCLoadErrorDispatcherAdapter {
     let errorDispatcher: BTCPriceErrorDisplayable
     var lastUpdatedBTCDate: Date?
     let loader: () async throws -> Void
-    var timer: Timer?
-    let timeout: TimeInterval
+    let timeout: Int
+    var timer: DispatchSourceTimer?
 
     init(
         errorDispatcher: BTCPriceErrorDisplayable,
         loadHandler: @escaping () async throws -> Void,
-        timeout: TimeInterval
+        timeoutInSeconds: Int
     ) {
         self.errorDispatcher = errorDispatcher
         self.loader = loadHandler
-        self.timeout = timeout
+        self.timeout = timeoutInSeconds
     }
 
-    func fireErrorDisplayTimerInMainThread() {
-        Task { @MainActor in
-            timer?.invalidate()
-            timer = Timer.scheduledTimer(
-                withTimeInterval: timeout,
-                repeats: false,
-                block: { _ in
-                    self.dispatchError()
-                }
-            )
+    func scheduleErrorDIsplayTimerAfterTimeout() {
+        let queue = DispatchQueue(label: "display.error.dispatch")
+        let atimer = DispatchSource.makeTimerSource(queue: queue)
+        atimer.setEventHandler { [weak self] in
+            self?.dispatchError()
         }
+        atimer.schedule(
+            deadline: .now() + DispatchTimeInterval.seconds(timeout),
+            repeating: .infinity
+        )
+        atimer.resume()
+        timer = atimer
     }
 
     private func invalidateErrorDisplayTimer() {
-        Task { @MainActor in
-            timer?.invalidate()
-        }
+        timer?.cancel()
     }
 
     private func dispatchError() {
@@ -48,15 +47,13 @@ final class BTCLoadErrorDispatcherAdapter {
     }
 
     func load() async {
-        fireErrorDisplayTimerInMainThread()
+        scheduleErrorDIsplayTimerAfterTimeout()
 
         do {
             try await loader()
             lastUpdatedBTCDate = .now
         } catch {
-            await MainActor.run {
-                dispatchError()
-            }
+            dispatchError()
         }
 
         invalidateErrorDisplayTimer()
