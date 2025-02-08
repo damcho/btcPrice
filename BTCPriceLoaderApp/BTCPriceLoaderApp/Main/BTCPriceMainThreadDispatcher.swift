@@ -5,8 +5,8 @@
 //  Created by Damian Modernell on 8/2/25.
 //
 
-import Foundation
 import BTCUtilityCore
+import Foundation
 
 struct BTCPriceMainThreadDispatcher<BTCDisplayable> {
     let decoratee: BTCDisplayable
@@ -31,6 +31,8 @@ extension BTCPriceMainThreadDispatcher: BTCPriceErrorDisplayable where BTCDispla
         }
     }
 }
+
+// MARK: BTCPriceErrorRemovable
 
 extension BTCPriceMainThreadDispatcher: BTCPriceErrorRemovable where BTCDisplayable == BTCPriceErrorRemovable {
     func hideBTCLoadError() {

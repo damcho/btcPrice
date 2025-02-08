@@ -16,9 +16,15 @@ enum BTCAppComposer {
         let btcPriceViewModel = BTCPriceViewModel()
 
         BTCCoreComposer.compose(
-            for: btcPriceViewModel,
-            errorDisplayable: btcErrorViewModel,
-            errorRemovable: btcErrorViewModel
+            for: BTCPriceMainThreadDispatcher(
+                decoratee: btcPriceViewModel
+            ),
+            errorDisplayable: BTCPriceMainThreadDispatcher(
+                decoratee: btcErrorViewModel
+            ),
+            errorRemovable: BTCPriceMainThreadDispatcher(
+                decoratee: btcErrorViewModel
+            )
         )
 
         return BTCUtilityView(
