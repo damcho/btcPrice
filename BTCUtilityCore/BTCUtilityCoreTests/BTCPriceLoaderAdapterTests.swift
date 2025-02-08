@@ -20,7 +20,7 @@ final class BTCPriceLoaderAdapterTests: XCTestCase {
 
         XCTAssertEqual(
             btcPriceDisplayableSpy.displayableMessages,
-            [.hideError, .success(anyBTCPrice)]
+            [.success(anyBTCPrice), .hideError]
         )
     }
 
@@ -34,7 +34,7 @@ final class BTCPriceLoaderAdapterTests: XCTestCase {
 
         XCTAssertEqual(
             btcPriceDisplayableSpy.displayableMessages,
-            [.hideError, .success(anyBTCPrice)]
+            [.success(anyBTCPrice), .hideError]
         )
     }
 
