@@ -22,7 +22,7 @@ public enum BTCCoreComposer {
     static let urlSessionHttpClient = URLSessionHTTPClient(
         session: .shared
     )
-    
+
     /**
      Schedules BTC price loading every second.
      BTCPriceDisplayable,BTCPriceErrorDisplayable and BTCPriceErrorRemovable are not guaranteed to be invoked in the main thread, it is up to the implementer to dispatch to the main thread if needed for UI purposes

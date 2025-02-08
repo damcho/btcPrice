@@ -24,10 +24,7 @@ final class BTCLoaderAdapter {
     }
 
     func load() async throws {
-        let newBTCPrice = try await loader.loadBTCPrice()
-        await MainActor.run {
-            btcPriceErrorRemovable?.hideBTCLoadError()
-            btcPriceDisplayable.display(newBTCPrice)
-        }
+        try await btcPriceDisplayable.display(loader.loadBTCPrice())
+        btcPriceErrorRemovable?.hideBTCLoadError()
     }
 }

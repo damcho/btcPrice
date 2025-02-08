@@ -38,14 +38,6 @@ final class BTCPriceLoaderAdapterTests: XCTestCase {
         )
     }
 
-    func test_dispatches_on_main_thread_on_btc_price_load() async throws {
-        try await expecttoDispatchOnMainThread(
-            forLoaderResult: .success(
-                anyBTCPrice
-            )
-        )
-    }
-
     func test_throws_on_btc_price_load_failure() async throws {
         let (sut, _, _) = await makeSUT(
             btcloadableStub: .failure(.connectivity)
@@ -79,34 +71,17 @@ extension BTCPriceLoaderAdapterTests {
 
         return (loaderAdapter, btcDisplayableSpy, btcLoadableStub)
     }
-
-    private func expecttoDispatchOnMainThread(
-        forLoaderResult: Result<BTCPrice, BTCPriceLoaderError>,
-        file: StaticString = #file,
-        line: UInt = #line
-    ) async throws {
-        let (sut, btcDisplayableSpy, _) = await makeSUT(
-            btcloadableStub: forLoaderResult
-        )
-
-        try await sut.load()
-
-        XCTAssertTrue(btcDisplayableSpy.isMainThread, file: file, line: line)
-    }
 }
 
 class BTCPriceDisplayableSpy: BTCPriceDisplayable, BTCPriceErrorRemovable {
     var displayableMessages: [BTCDisplayable] = []
-    var isMainThread = false
     var didDisplayError = false
     var displayable: BTCPrice?
     func display(_ price: BTCPrice) {
-        isMainThread = Thread.isMainThread
         displayableMessages.append(.success(price))
     }
 
     func hideBTCLoadError() {
-        isMainThread = Thread.isMainThread
         displayableMessages.append(.hideError)
     }
 }
